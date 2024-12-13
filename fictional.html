@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fictional Books</title>
+  <link rel="stylesheet" href="style.css">
+  </head>
+<body>
+  <div id="loader-container">
+    <div id="loader"></div>
+  </div>
+  <div class="info-bar">
+    <div class="social-icons">
+      <div class="icons"><a href="#"><img
+            src="https://png.pngtree.com/png-clipart/20221019/original/pngtree-whatsapp-mobile-software-icon-png-image_8704828.png"
+            alt="wp"></a></div>
+      <div class="icons"><a href="#"><img src="https://cdn.icon-icons.com/icons2/2248/PNG/512/instagram_icon_138461.png"
+            alt="insta"></a></div>
+      <div class="icons"><a href="#"><img src="https://img.icons8.com/ios_filled/512/facebook-new.png" alt="fb"></a>
+      </div>
+      <div class="icons"><a href="#"><img src="https://cdn-icons-png.flaticon.com/512/152/152810.png" alt="yt"></a>
+      </div>
+    </div>
+    <div class="info-tab">
+      <a href="#">
+        <p>Track Order</p>
+      </a>
+      <p>|</p>
+      <a href="#">
+        <p>About Us</p>
+      </a>
+      <p>|</p>
+      <a href="#">
+        <p>Contact Us</p>
+      </a>
+
+    </div>
+  </div>
+  <header>
+    <div class="logo">
+      <a href="#">
+        <p>BookHive</p>
+      </a>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search Product..." class="search-input" />
+      <select class="category-select">
+        <option>Select Category</option>
+        <option>Books</option>
+        <option>Fiction</option>
+        <option>Non-fiction</option>
+        <option>Comics</option>
+      </select>
+      <button class="search-button">
+        <img src="https://i.postimg.cc/XJXMCj6V/loupe.png" alt="Search" />
+      </button>
+    </div>
+
+    <div class="header-icons">
+      <a href="#">
+        <div class="wishlist">
+          <img src="https://i.postimg.cc/5t4Wf5PQ/e-commerce.png" alt="wishlist">
+        </div>
+      </a>
+      <a href="#">
+        <div class="account">
+          <img src="https://i.postimg.cc/MTLC0Cz1/user.png" alt="user">
+        </div>
+      </a>
+      <a href="#">
+        <div class="cart">
+          <img src="https://i.postimg.cc/7LK8hCcs/online-shopping.png" alt="cart">
+        </div>
+      </a>
+    </div>
+
+  </header>
+  <div class="search-bar-mobile">
+    <input type="text" placeholder="Search Product..." class="search-input" />
+    <button class="search-button">
+      <img src="https://i.postimg.cc/XJXMCj6V/loupe.png" alt="Search" />
+    </button>
+  </div>
+
+  <div class="navbar">
+    <ul>
+      <a href="#">
+        <li>All Categories</li>
+      </a>
+      <a href="fictional.html">
+        <li>Fictional</li>
+      </a>
+      <a href="#">
+        <li>Non-Fictional</li>
+      </a>
+      <a href="#">
+        <li>Manga & Comics</li>
+      </a>
+      <a href="#">
+        <li>Children</li>
+      </a>
+      <a href="#">
+        <li>Horror</li>
+      </a>
+      <a href="#">
+        <li>Academic</li>
+      </a>
+    </ul>
+  </div>
+
+  <div id="fictional-book-container">
+    <div class="book-container" onclick="getBook()" data-isbn="9780439708180">
+      <img src="https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg">
+      <h4>Harry Potter</h4>
+      <p><s>Rs. 399</s>  Rs. 199</p>
+    </div>
+  </div>
+
+  
+  <script src="script.js"></script>
+</body>
+</html>
