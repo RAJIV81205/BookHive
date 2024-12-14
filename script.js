@@ -18,9 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (current=="fictional.html" || "fictional"){
     fetchFictional()
   }
-  else if(current=="cart.html" || "cart"){
-    loadCart()
-  }
+  loadCart()
 
 
 });
