@@ -15,10 +15,10 @@ document.addEventListener("DOMContentLoaded", function () {
   })
 
 
-  if (current=="fictional.html"){
+  if (current=="fictional.html" || "fictional"){
     fetchFictional()
   }
-  else if(current=="cart.html"){
+  else if(current=="cart.html" || "cart"){
     loadCart()
   }
 
