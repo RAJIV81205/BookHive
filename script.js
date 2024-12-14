@@ -19,6 +19,9 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchFictional()
   }
   loadCart()
+  updateCartCount();
+  
+
 
 
 });
@@ -63,7 +66,7 @@ async function fetchFictional() {
       const bookElement = document.createElement('div');
       bookElement.classList.add('book-container');
 
-      // Adding book details
+      
       bookElement.innerHTML = `
         <img src="${book.image}" alt="${book.name}">
         <h4>${book.name}</h4>
@@ -74,20 +77,22 @@ async function fetchFictional() {
       container.appendChild(bookElement);
     });
 
-    // Add "Add to Cart" functionality
+  
     document.querySelectorAll('.add-to-cart-btn').forEach(button => {
       button.addEventListener('click', function () {
         const isbn = this.getAttribute('data-isbn');
         const book = fictionalBooks.find(b => b.isbn === isbn);
 
-        // Get cart from localStorage or initialize it
+        
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-        // Add book to cart if not already present
+       
         if (!cart.some(item => item.isbn === isbn)) {
           cart.push(book);
           localStorage.setItem('cart', JSON.stringify(cart));
           alert(`${book.name} added to cart!`);
+          updateCartCount()
+          button.textContent = "Added"
         } else {
           alert(`${book.name} is already in the cart.`);
         }
@@ -113,54 +118,54 @@ async function fetchFictional() {
 
 
 
-
-
 function loadCart() {
   const cartContainer = document.getElementById('cart-container');
-
-
   const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-  if (cart.length == 0) {
+  if (cart.length === 0) {
     cartContainer.innerHTML = '<p>Your cart is empty!</p>';
+    updateCartCount();
     return;
   }
 
-  cartContainer.innerHTML=""
+  cartContainer.innerHTML = '';
 
- 
   cart.forEach(book => {
     const bookElement = document.createElement('div');
     bookElement.classList.add('cart-book-container');
 
     bookElement.innerHTML = `
-          <img src="${book.image}" alt="${book.name}">
-            <div class="cart-book-info">
-                <h2>${book.name}</h2>
-                <h3>${book.author}</h3>
-                <p>${book.description}</p>
-                <h3>Price: ₹${book.price}</h3>
-                <button class="remove-from-cart-btn" data-isbn="${book.isbn}">Remove</button>
-            </div>
+      <img src="${book.image}" alt="${book.name}">
+      <div class="cart-book-info">
+        <h2>${book.name}</h2>
+        <h3>${book.author}</h3>
+        <p>${book.description}</p>
+        <h3>Price: ₹${book.price}</h3>
+        <button class="remove-from-cart-btn" data-isbn="${book.isbn}">Remove</button>
+      </div>
     `;
 
     cartContainer.appendChild(bookElement);
   });
 
- 
   document.querySelectorAll('.remove-from-cart-btn').forEach(button => {
     button.addEventListener('click', function () {
       const isbn = this.getAttribute('data-isbn');
       const updatedCart = cart.filter(book => book.isbn !== isbn);
-
-      
       localStorage.setItem('cart', JSON.stringify(updatedCart));
-      loadCart(); 
+      loadCart();
+      updateCartCount();
     });
   });
 }
 
+function updateCartCount() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const cartCountElements = document.querySelectorAll('.cart .count');
+  cartCountElements.forEach(cartCountElement => {
+    cartCountElement.textContent = cart.length > 0 ? cart.length : '0';
+  });
+  localStorage.setItem('cart-total', cart.length > 0 ? cart.length : '0');
+}
 
-
-
-
+document.addEventListener('DOMContentLoaded', updateCartCount);
