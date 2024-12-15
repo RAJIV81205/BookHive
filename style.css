@@ -145,8 +145,19 @@ header {
   background-color: white;
 }
 
-.search-bar-mobile {
+.navbar-mobile{
   display: none;
+  flex-direction: row;
+  width: 100%;
+  height: 86.8px;
+  justify-content: center;
+  align-items: center;
+
+
+}
+
+.search-bar-mobile {
+  display: flex;
   align-items: center;
   border: 1px solid #dcdcdc;
   border-radius: 25px;
@@ -156,6 +167,22 @@ header {
   background-color: white;
   margin: 20px;
 }
+
+
+.hamburger-menu{
+  width: 20%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hamburger-menu img{
+  height:32px;
+  width: 32px;
+}
+
+
 
 
 
@@ -356,6 +383,7 @@ footer {
 }
 
 #fictional-book-container {
+  border-top: 1px solid rgba(128, 128, 128, 0.323);
   width: 100%;
   height: fit-content;
   display: flex;
@@ -442,7 +470,9 @@ footer {
   justify-content: center;
   border-radius: 5px;
   border: none;
-  background-color: rgba(237, 120, 165, 0.192);
+  background-color:rgba(0, 0, 0, 0);
+  cursor: pointer;
+  
 
 
 }
@@ -452,6 +482,13 @@ footer {
   height: 25px;
   box-shadow: none;
   border: none;
+  filter: drop-shadow(2px 2px 8px #222);
+  transition: filter 0.3s;
+
+}
+
+.wishlist-btn img:hover{
+  filter: drop-shadow(2px 2px 8px #ff0000);
 
 }
 
@@ -473,7 +510,7 @@ footer {
     display: none;
   }
 
-  .search-bar-mobile {
+  .navbar-mobile {
     display: flex;
   }
 
