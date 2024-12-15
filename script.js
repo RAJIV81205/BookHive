@@ -71,6 +71,18 @@ setInterval(nextSlide, 3000);
 
 
 
+document.querySelectorAll('.hamburger-menu').forEach(menu => {
+  menu.addEventListener('click', () => {
+    const menuContent = document.querySelector('.menu-content'); 
+    if (menuContent) {
+      menuContent.classList.toggle('open'); 
+    }
+  });
+});
+
+
+
+
 
 
 async function fetchBooks(genre) {
