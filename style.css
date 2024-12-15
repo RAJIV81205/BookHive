@@ -56,7 +56,6 @@
 body {
   background-color: var(--background-color);
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
 }
@@ -440,6 +439,7 @@ footer {
   margin: 25px;
   height: fit-content;
   width: 200px;
+  height: 398.2px;
   border: 1px solid black;
   border-radius: 25px;
   align-items: center;
@@ -447,13 +447,12 @@ footer {
   overflow: hidden;
   cursor: pointer;
   box-shadow: 3px 3px 6px rgba(128, 128, 128, 0.296);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: box-shadow 0.3s;
 
 }
 
 
 .book-container:hover {
-  transform: scale(1.05);
   box-shadow: 3px 3px 12px rgba(128, 128, 128, 0.625);
 }
 
@@ -467,6 +466,10 @@ footer {
 
 .book-container h4,
 .cart-book-container h4 {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 10px 0;
   text-wrap: balance;
   color: #8b4513;
@@ -618,6 +621,7 @@ footer {
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+  margin-bottom: 50px;
 }
 
 .cart-book-container {
@@ -668,4 +672,76 @@ footer {
 
 .cart-book-info button:hover {
   background-color: #e60000;
+}
+
+
+#checkout-container{
+  margin: 25px 0;
+  padding: 20px 0;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 400px;
+  background-color: #faf3e0;
+  border: 1px solid rgba(127, 122, 122, 0.232);
+  border-radius: 8px;
+  height: fit-content;
+}
+
+#checkout-container h1{
+  margin-bottom: 25px;
+  
+}
+
+#checkout-container span{
+  width: 90%;
+  border: 2px solid black;
+  border-radius: 2px;
+  margin: 10px 0;
+}
+
+.check-price , .taxes , .total-price {
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  padding: 0 25px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#btn-container{
+  display: none;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 90%;
+  max-width: 500px;
+  height: 120px;
+  padding: 5px 0;
+  justify-content: space-evenly;
+
+}
+
+#checkout-btn{
+  font-size: 1.1rem;
+  height: 50px;
+  width: 220px;
+  background-color: #45a049;
+  border-radius: 5px;
+  border: 1px solid var(--link-color);
+  padding: 5px 12px;
+  color: var(--background-color);
+  cursor: pointer;
+}
+
+#clear-cart-btn{
+  cursor: pointer;
+  font-size: 1.1rem;
+  height: 50px;
+  width: 220px;
+  background-color: #d05656;
+  color: var(--background-color);
+  border-radius: 5px;
+  border: 1px solid var(--background-color);
+  padding: 5px 12px;
 }
