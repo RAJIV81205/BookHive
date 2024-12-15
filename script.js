@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   const loader = document.getElementById("loader-container");
   loader.style.display = "none";
   
@@ -15,15 +15,30 @@ document.addEventListener("DOMContentLoaded", function () {
   })
 
 
-  if (current=="fictional.html" || "fictional"){
-    fetchFictional()
+  const params = new URLSearchParams(window.location.search);
+  const genre = params.get("genre");
+
+
+  if (genre){
+    fetchBooks(genre)
   }
-  loadCart()
-  updateCartCount();
+  try {
+    loadWishlist();
+  } catch (error) {
+    console.error("Error in loadWishlist:", error);
+  }
   
-
-
-
+  try {
+    loadCart();
+  } catch (error) {
+    console.error("Error in loadCart:", error);
+  }
+  
+  try {
+    updateCartCount();
+  } catch (error) {
+    console.error("Error in updateCartCount:", error);
+  }
 });
 
 
@@ -49,18 +64,18 @@ setInterval(nextSlide, 3000);
 
 
 
-async function fetchFictional() {
+async function fetchBooks(genre) {
   const container = document.getElementById("fictional-book-container");
 
   try {
-    // Fetching books data
+    
     const response = await fetch('books.json');
     const books = await response.json();
 
-    // Filtering for fictional books
-    const fictionalBooks = books.filter(book => book.category === "Fictional");
+    
+    const fictionalBooks = books.filter(book => book.category === genre);
 
-    // Rendering books dynamically
+    
     container.innerHTML = '';
     fictionalBooks.forEach(book => {
       const bookElement = document.createElement('div');
@@ -71,11 +86,37 @@ async function fetchFictional() {
         <img src="${book.image}" alt="${book.name}">
         <h4>${book.name}</h4>
         <p><s>₹${book.original_price}</s> ₹${book.price}</p>
+        <div class="btn-container">
+        <button class="wishlist-btn" data-isbn="${book.isbn}"><img src="https://i.postimg.cc/5t4Wf5PQ/e-commerce.png"></button>
         <button class="add-to-cart-btn" data-isbn="${book.isbn}">Add to Cart</button>
+        </div>
       `;
 
       container.appendChild(bookElement);
     });
+
+
+
+    document.querySelectorAll('.wishlist-btn').forEach(button => {
+      button.addEventListener('click', function () {
+        const isbn = this.getAttribute('data-isbn');
+        const book = fictionalBooks.find(b => b.isbn === isbn);
+
+        
+        const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+       
+        if (!wishlist.some(item => item.isbn === isbn)) {
+          wishlist.push(book);
+          localStorage.setItem('wishlist', JSON.stringify(wishlist));
+          alert(`${book.name} added to wishlist!`);
+        } else {
+          alert(`${book.name} is already in the wishlist.`);
+        }
+      });
+    });
+
+
 
   
     document.querySelectorAll('.add-to-cart-btn').forEach(button => {
@@ -109,6 +150,54 @@ async function fetchFictional() {
 
 
 
+
+
+
+
+
+
+
+function loadWishlist() {
+  const wishlistContainer = document.getElementById('wishlist-container');
+  const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+  if (wishlist.length === 0) {
+    wishlistContainer.innerHTML = '<p>Your wishlist is empty!</p>';
+    updatewishlistCount();
+    return;
+  }
+
+  wishlistContainer.innerHTML = '';
+
+  wishlist.forEach(book => {
+    const bookElement = document.createElement('div');
+    bookElement.classList.add('cart-book-container');
+
+    bookElement.innerHTML = `
+      <img src="${book.image}" alt="${book.name}">
+      <div class="cart-book-info">
+        <h2>${book.name}</h2>
+        <h3>${book.author}</h3>
+        <p>${book.description}</p>
+        <h3>Price: ₹${book.price}</h3>
+        <button class="remove-from-wishlist-btn" data-isbn="${book.isbn}">Remove</button>
+      </div>
+    `;
+
+    wishlistContainer.appendChild(bookElement);
+  });
+
+  document.querySelectorAll('.remove-from-wishlist-btn').forEach(button => {
+    button.addEventListener('click', function () {
+      const isbn = this.getAttribute('data-isbn');
+      const updatedwishlist = wishlist.filter(book => book.isbn !== isbn);
+      localStorage.setItem('wishlist', JSON.stringify(updatedwishlist));
+      loadWishlist();
+
+    });
+  });
+ 
+}
 
 
 
