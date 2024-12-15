@@ -2,21 +2,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const loader = document.getElementById("loader-container");
   loader.style.display = "none";
   
-  const current = window.location.pathname.split("/").pop();
+
   const navlinks = document.querySelectorAll(".navbar ul a")
-
-
-  navlinks.forEach(nav=>{
-    if (current == nav.getAttribute("href")){
-    nav.classList.add("current");}
-    else {
-      nav.classList.remove("current");
-    }
-  })
-
-
   const params = new URLSearchParams(window.location.search);
   const genre = params.get("genre");
+
+
+  
+
+
+  
 
 
   if (genre){
@@ -39,6 +34,20 @@ document.addEventListener("DOMContentLoaded", () => {
   } catch (error) {
     console.error("Error in updateCartCount:", error);
   }
+
+  try{
+    navlinks.forEach(nav=>{
+      if (genre.toLowerCase() == nav.dataset.name){
+      nav.classList.add("current");}
+      else {
+        nav.classList.remove("current");
+      }
+    })
+  } catch(error){
+    console.error("Error in navlinks:", error);
+  }
+
+  
 });
 
 
@@ -66,6 +75,7 @@ setInterval(nextSlide, 3000);
 
 async function fetchBooks(genre) {
   const container = document.getElementById("fictional-book-container");
+  document.title = `${genre} - BookHive`
 
   try {
     
