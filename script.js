@@ -1,20 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const loader = document.getElementById("loader-container");
-  loader.style.display = "none";
-  
+
+
 
   const navlinks = document.querySelectorAll(".navbar ul a")
   const params = new URLSearchParams(window.location.search);
   const genre = params.get("genre");
 
 
-  
 
 
-  
 
 
-  if (genre){
+
+
+  if (genre) {
     fetchBooks(genre)
   }
   try {
@@ -22,32 +21,36 @@ document.addEventListener("DOMContentLoaded", () => {
   } catch (error) {
     console.error("Error in loadWishlist:", error);
   }
-  
+
   try {
     loadCart();
   } catch (error) {
     console.error("Error in loadCart:", error);
   }
-  
+
   try {
     updateCartCount();
   } catch (error) {
     console.error("Error in updateCartCount:", error);
   }
 
-  try{
-    navlinks.forEach(nav=>{
-      if (genre.toLowerCase() == nav.dataset.name){
-      nav.classList.add("current");}
+  try {
+    navlinks.forEach(nav => {
+      if (genre.toLowerCase() == nav.dataset.name) {
+        nav.classList.add("current");
+      }
       else {
         nav.classList.remove("current");
       }
     })
-  } catch(error){
+  } catch (error) {
     console.error("Error in navlinks:", error);
   }
 
-  
+  const loader = document.getElementById("loader-container");
+  loader.style.display = "none";
+
+
 });
 
 
@@ -57,14 +60,14 @@ let currentIndex = 0;
 const slides = document.querySelectorAll('.slideshow-container img');
 
 function showSlide(index) {
-    slides.forEach((slide, i) => {
-        slide.style.display = i === index ? 'block' : 'none';
-    });
+  slides.forEach((slide, i) => {
+    slide.style.display = i === index ? 'block' : 'none';
+  });
 }
 
 function nextSlide() {
-    currentIndex = (currentIndex + 1) % slides.length;
-    showSlide(currentIndex);
+  currentIndex = (currentIndex + 1) % slides.length;
+  showSlide(currentIndex);
 }
 
 setInterval(nextSlide, 3000);
@@ -73,9 +76,9 @@ setInterval(nextSlide, 3000);
 
 document.querySelectorAll('.hamburger-menu').forEach(menu => {
   menu.addEventListener('click', () => {
-    const menuContent = document.querySelector('.menu-content'); 
+    const menuContent = document.querySelector('.menu-content');
     if (menuContent) {
-      menuContent.classList.toggle('open'); 
+      menuContent.classList.toggle('open');
     }
   });
 });
@@ -90,20 +93,20 @@ async function fetchBooks(genre) {
   document.title = `${genre} - BookHive`
 
   try {
-    
+
     const response = await fetch('books.json');
     const books = await response.json();
 
-    
+
     const fictionalBooks = books.filter(book => book.category === genre);
 
-    
+
     container.innerHTML = '';
     fictionalBooks.forEach(book => {
       const bookElement = document.createElement('div');
       bookElement.classList.add('book-container');
 
-      
+
       bookElement.innerHTML = `
         <img src="${book.image}" alt="${book.name}">
         <h4>${book.name}</h4>
@@ -124,10 +127,10 @@ async function fetchBooks(genre) {
         const isbn = this.getAttribute('data-isbn');
         const book = fictionalBooks.find(b => b.isbn === isbn);
 
-        
+
         const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
 
-       
+
         if (!wishlist.some(item => item.isbn === isbn)) {
           wishlist.push(book);
           localStorage.setItem('wishlist', JSON.stringify(wishlist));
@@ -140,16 +143,16 @@ async function fetchBooks(genre) {
 
 
 
-  
+
     document.querySelectorAll('.add-to-cart-btn').forEach(button => {
       button.addEventListener('click', function () {
         const isbn = this.getAttribute('data-isbn');
         const book = fictionalBooks.find(b => b.isbn === isbn);
 
-        
+
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-       
+
         if (!cart.some(item => item.isbn === isbn)) {
           cart.push(book);
           localStorage.setItem('cart', JSON.stringify(cart));
@@ -218,7 +221,7 @@ function loadWishlist() {
 
     });
   });
- 
+
 }
 
 
@@ -236,6 +239,8 @@ function loadCart() {
   if (cart.length === 0) {
     cartContainer.innerHTML = '<p>Your cart is empty!</p>';
     updateCartCount();
+    document.getElementById('checkout-container').style.display = 'none';
+    document.getElementById('btn-container').style.display="none";
     return;
   }
 
@@ -251,13 +256,16 @@ function loadCart() {
         <h2>${book.name}</h2>
         <h3>${book.author}</h3>
         <p>${book.description}</p>
-        <h3>Price: ₹${book.price}</h3>
+        <h3 class="price">Price: ₹${book.price}</h3>
         <button class="remove-from-cart-btn" data-isbn="${book.isbn}">Remove</button>
       </div>
     `;
 
     cartContainer.appendChild(bookElement);
+
   });
+
+  cartTotal();
 
   document.querySelectorAll('.remove-from-cart-btn').forEach(button => {
     button.addEventListener('click', function () {
@@ -280,3 +288,45 @@ function updateCartCount() {
 }
 
 document.addEventListener('DOMContentLoaded', updateCartCount);
+
+
+
+function cartTotal() {
+  var totalprice = 0;
+  document.querySelectorAll('.price').forEach(book => {
+    totalprice = totalprice + Math.floor(book.textContent.slice(8));
+  })
+
+  console.log(totalprice);
+  const taxes = Math.round((18 / 100) * totalprice);
+  const total = totalprice + taxes;
+
+  const checkoutcontainer = document.getElementById('checkout-container');
+
+  checkoutcontainer.innerHTML = '';
+
+  checkoutcontainer.innerHTML = `<h1>Checkout</h1>
+        <div class="check-price">
+            <p>Subtotal</p>
+            <p>₹ ${totalprice}</p>
+        </div>
+        <div class="taxes">
+            <p>Taxes (18%)</p>
+            <p>₹ ${taxes}</p>
+        </div>
+        <span></span>
+        <div class="total-price">
+            <strong>Total</strong>
+            <strong>₹ ${total}</strong>
+        </div>`
+
+  document.getElementById('btn-container').style.display = "flex";
+
+}
+
+
+function clearCart(){
+  localStorage.removeItem('cart');
+  loadCart();
+
+}
