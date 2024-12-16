@@ -486,10 +486,12 @@ document.getElementById('login-btn').addEventListener('click', async () => {
 
     } else {
       alert(data.message || 'Login failed');
+      location.reload()
     }
   } catch (error) {
     console.error('Error:', error);
     alert('Something went wrong. Please try again later.');
+    location.reload()
   }
 });
 
@@ -554,13 +556,15 @@ document.getElementById('choose-signup-btn').addEventListener('click', () => {
       if (response.ok) {
         alert('Signup successful');
         console.log(data);
-        window.location.href = "login.html"
+        location.reload()
       } else {
         alert(data.message || 'Signup failed');
+        location.reload()
       }
     } catch (error) {
       console.error('Error:', error);
       alert('Something went wrong. Please try again later.');
+      location.reload()
     }
   });
 
