@@ -65,7 +65,7 @@ async function verifyToken() {
   }
 
   try {
-    const response = await fetch('http://localhost:3000/verify', {
+    const response = await fetch('https://bookhive-yxmn.onrender.com/verify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -459,7 +459,7 @@ document.getElementById('login-btn').addEventListener('click', async () => {
   }
 
   try {
-    const response = await fetch('http://localhost:3000/login', {
+    const response = await fetch('https://bookhive-yxmn.onrender.com/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -535,7 +535,7 @@ document.getElementById('choose-signup-btn').addEventListener('click', () => {
 
     try {
 
-      const response = await fetch('http://localhost:3000/signup', {
+      const response = await fetch('https://bookhive-yxmn.onrender.com/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
