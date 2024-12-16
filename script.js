@@ -1,15 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-
-
   const navlinks = document.querySelectorAll(".navbar ul a")
   const params = new URLSearchParams(window.location.search);
   const genre = params.get("genre");
-
-
-
-
-
 
 
 
@@ -35,6 +28,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   try {
+    verifyToken();
+  } catch (error) {
+    console.error("WebToken Invalid or Expired:", error);
+  }
+
+
+
+  try {
     navlinks.forEach(nav => {
       if (genre.toLowerCase() == nav.dataset.name) {
         nav.classList.add("current");
@@ -47,11 +48,88 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Error in navlinks:", error);
   }
 
+
+
   const loader = document.getElementById("loader-container");
   loader.style.display = "none";
 
 
 });
+
+
+async function verifyToken() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.log("No Token Found");
+    return
+  }
+
+  try {
+    const response = await fetch('http://localhost:3000/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        token: token
+      })
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      console.log(data.id);
+
+      const at = new Date(data.iat * 1000);
+      const exp = new Date(data.exp * 1000);
+      console.log(at.toLocaleString());
+      console.log(exp.toLocaleString());
+
+      const exptime = data.exp;
+      const current = new Date().getTime();
+
+
+      if (current > exptime) {
+        updateUser();
+        return;
+      }
+      else {
+        localStorage.removeItem('token')
+        localStorage.removeItem('username')
+        localStorage.removeItem('email')
+        localStorage.removeItem('mobile')
+        console.log('Token Expired');
+        document.getElementById('user-details').innerHTML = `<button class="login-page">Login Now</button>`;
+
+      }
+
+
+
+    } else {
+      alert(data.message || 'Unknown');
+    }
+
+
+
+  } catch (error) {
+    console.error("unknown")
+  }
+}
+
+
+function updateUser() {
+  const name = localStorage.getItem('username');
+  const email = localStorage.getItem('email');
+  const mobile = localStorage.getItem('mobile');
+
+  document.getElementById('user-details').innerHTML = ''
+
+
+  document.getElementById('user-details').innerHTML = `
+  <h3>${name}</h3>
+        <h5>${email}</h5>
+        <h5>${mobile}</h5>`
+
+}
 
 
 
@@ -82,6 +160,29 @@ document.querySelectorAll('.hamburger-menu').forEach(menu => {
     }
   });
 });
+
+
+
+document.querySelectorAll('.account').forEach(acc=>
+  acc.addEventListener('click', () => {
+  const userDetails = document.getElementById('user-details');
+
+
+  if (userDetails.style.display === 'none' || userDetails.style.display === '') {
+    userDetails.style.display = 'flex';
+  } else {
+    userDetails.style.display = 'none';
+  }
+  document.querySelectorAll('.login-page').forEach(button => {
+    button.addEventListener('click', () => {
+      window.location.href = 'login.html';
+  
+    })
+  })
+}))
+
+
+
 
 
 
@@ -240,7 +341,7 @@ function loadCart() {
     cartContainer.innerHTML = '<p>Your cart is empty!</p>';
     updateCartCount();
     document.getElementById('checkout-container').style.display = 'none';
-    document.getElementById('btn-container').style.display="none";
+    document.getElementById('btn-container').style.display = "none";
     return;
   }
 
@@ -325,8 +426,150 @@ function cartTotal() {
 }
 
 
-function clearCart(){
+function clearCart() {
   localStorage.removeItem('cart');
   loadCart();
 
 }
+
+
+document.getElementById('choose-login-btn').addEventListener('click', () => {
+  document.querySelector('.selected-btn').style.transform = "translateX(0%)";
+
+
+  const container = document.getElementById('main-user-container');
+  container.innerHTML = '';
+
+  container.innerHTML = `<label for="username">Email</label>
+            <input type="email" name="username" id="login-email" placeholder="john@gmail.com">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="login-password" placeholder="********">
+            <button id="login-btn">Login</button>`
+
+
+});
+
+document.getElementById('login-btn').addEventListener('click', async () => {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+
+  if (!email || !password) {
+    alert('Please enter valid information');
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:3000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert('Login successful');
+      console.log('User data:', data);
+      localStorage.setItem('token', data.token)
+      localStorage.setItem('username', data.user.name)
+      localStorage.setItem('email', data.user.email)
+      localStorage.setItem('mobile', data.user.mobile)
+      verifyToken();
+
+      window.location.href = "index.html";
+
+
+    } else {
+      alert(data.message || 'Login failed');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Something went wrong. Please try again later.');
+  }
+});
+
+
+
+
+
+
+
+
+
+
+document.getElementById('choose-signup-btn').addEventListener('click', () => {
+  document.querySelector('.selected-btn').style.transform = "translateX(100%)";
+
+  const container = document.getElementById('main-user-container');
+  container.innerHTML = '';
+
+  container.innerHTML = `<label for="name">Name</label>
+            <input type="text" name="name" id="signup-text" placeholder="John Doe">
+            <label for="mobile">Phone Number</label>
+            <input type="number" name="mobile" id="signup-number" placeholder="9999999999">
+            <label for="username">Email</label>
+            <input type="email" name="username" id="signup-email" placeholder="john@gmail.com">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="signup-password" placeholder="********">
+
+            <button id="signup-btn">Signup</button>`;
+
+
+  document.getElementById('signup-btn').addEventListener('click', async () => {
+    const name = document.getElementById('signup-text').value;
+    const mobile = document.getElementById('signup-number').value;
+    const email = document.getElementById('signup-email').value;
+    const password = document.getElementById('signup-password').value;
+    const time = new Date().toLocaleString();
+
+
+    if (!name || !mobile || !email || !password) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    try {
+
+      const response = await fetch('http://localhost:3000/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: name,
+          mobile: mobile,
+          email: email,
+          password: password,
+          time: time
+        })
+      });
+
+
+      const data = await response.json();
+      if (response.ok) {
+        alert('Signup successful');
+        console.log(data);
+        window.location.href = "login.html"
+      } else {
+        alert(data.message || 'Signup failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Something went wrong. Please try again later.');
+    }
+  });
+
+
+
+
+
+})
+
+
+
+
