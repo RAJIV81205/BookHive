@@ -4,20 +4,23 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cors = require('cors'); // Import CORS
 const dotenv = require('dotenv');
+const path = require('path');
 
-// Load environment variables
+
 dotenv.config();
 
 const app = express();
-app.use(express.json()); // Middleware to parse JSON requests
-app.use(cors()); // Enable CORS for all routes
+app.use(express.json()); 
+app.use(cors()); 
 
-// Environment variables
-const PORT = process.env.PORT || 5000;
+app.use(express.static(path.join(__dirname)));
+
+
+const PORT = process.env.PORT ;
 const MONGODB_URI = process.env.MONGODB_URI;
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Connect to MongoDB
+
 mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -25,7 +28,7 @@ mongoose.connect(MONGODB_URI, {
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('Error connecting to MongoDB:', err));
 
-// User Schema and Model
+
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true, trim: true },
     mobile: { type: String, required: true },
