@@ -107,7 +107,12 @@ async function verifyToken() {
     
 
 
-  } catch (error) {
+  }else {
+      console.error(data.message || 'Unknown');
+    }
+
+      
+    catch (error) {
     console.error("unknown")
   }
 }
