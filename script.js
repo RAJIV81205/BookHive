@@ -65,7 +65,7 @@ async function verifyToken() {
   }
 
   try {
-    const response = await fetch('https://bookhive-fngz7jxp.b4a.run/verify', {
+    const response = await fetch('https://bookhive-yxmn.onrender.com/verify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -116,6 +116,11 @@ async function verifyToken() {
 }
 
 
+
+
+
+
+
 function updateUser() {
   const name = localStorage.getItem('username');
   const email = localStorage.getItem('email');
@@ -149,6 +154,9 @@ function updateUser() {
 
 
 
+
+
+
 let currentIndex = 0;
 const slides = document.querySelectorAll('.slideshow-container img');
 
@@ -167,6 +175,9 @@ setInterval(nextSlide, 3000);
 
 
 
+
+
+
 document.querySelectorAll('.hamburger-menu').forEach(menu => {
   menu.addEventListener('click', () => {
     const menuContent = document.querySelector('.menu-content');
@@ -175,6 +186,10 @@ document.querySelectorAll('.hamburger-menu').forEach(menu => {
     }
   });
 });
+
+
+
+
 
 
 
@@ -213,8 +228,12 @@ async function fetchBooks(genre) {
     const response = await fetch('books.json');
     const books = await response.json();
 
+    if (genre=="All"){
+      var fictionalBooks = books;
 
-    const fictionalBooks = books.filter(book => book.category === genre);
+    }else{
+    var fictionalBooks = books.filter(book => book.category === genre);
+    }
 
 
     container.innerHTML = '';
@@ -483,7 +502,7 @@ document.getElementById('login-btn').addEventListener('click', async () => {
   }
 
   try {
-    const response = await fetch('https://bookhive-fngz7jxp.b4a.run/login', {
+    const response = await fetch('https://bookhive-yxmn.onrender.com/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -561,7 +580,7 @@ document.getElementById('choose-signup-btn').addEventListener('click', () => {
 
     try {
 
-      const response = await fetch('https://bookhive-fngz7jxp.b4a.run/signup', {
+      const response = await fetch('https://bookhive-yxmn.onrender.com/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
