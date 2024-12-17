@@ -65,7 +65,7 @@ async function verifyToken() {
   }
 
   try {
-    const response = await fetch('https://bookhive-fngz7jxp.b4a.run//verify', {
+    const response = await fetch('https://bookhive-fngz7jxp.b4a.run/verify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -105,7 +105,7 @@ async function verifyToken() {
 
 
     } else {
-      console.error(data.message || 'Unknown');
+      console.log(data.message || 'Unknown');
     }
 
 
@@ -127,7 +127,22 @@ function updateUser() {
   document.getElementById('user-details').innerHTML = `
   <h3>${name}</h3>
         <h5>${email}</h5>
-        <h5>${mobile}</h5>`
+        <h5>${mobile}</h5>
+        <button id="sign-out-btn">Sign Out</button>`
+
+
+        document.querySelectorAll('#sign-out-btn').forEach(button=>{
+          button.addEventListener('click',()=>{
+            localStorage.removeItem('token')
+        localStorage.removeItem('username')
+        localStorage.removeItem('email')
+        localStorage.removeItem('mobile')
+        console.log('Token Expired');
+        location.reload();
+
+
+          })
+        })
 
 }
 
@@ -163,23 +178,23 @@ document.querySelectorAll('.hamburger-menu').forEach(menu => {
 
 
 
-document.querySelectorAll('.account').forEach(acc=>
+document.querySelectorAll('.account').forEach(acc =>
   acc.addEventListener('click', () => {
-  const userDetails = document.getElementById('user-details');
+    const userDetails = document.getElementById('user-details');
 
 
-  if (userDetails.style.display === 'none' || userDetails.style.display === '') {
-    userDetails.style.display = 'flex';
-  } else {
-    userDetails.style.display = 'none';
-  }
-  document.querySelectorAll('.login-page').forEach(button => {
-    button.addEventListener('click', () => {
-      window.location.href = 'login.html';
-  
+    if (userDetails.style.display === 'none' || userDetails.style.display === '') {
+      userDetails.style.display = 'flex';
+    } else {
+      userDetails.style.display = 'none';
+    }
+    document.querySelectorAll('.login-page').forEach(button => {
+      button.addEventListener('click', () => {
+        window.location.href = 'login.html';
+
+      })
     })
-  })
-}))
+  }))
 
 
 
@@ -448,6 +463,15 @@ document.getElementById('choose-login-btn').addEventListener('click', () => {
 
 
 });
+
+
+
+
+
+
+
+
+
 
 document.getElementById('login-btn').addEventListener('click', async () => {
   const email = document.getElementById('login-email').value;
