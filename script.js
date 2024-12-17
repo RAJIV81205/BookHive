@@ -104,10 +104,7 @@ async function verifyToken() {
 
 
 
-    } else {
-      alert(data.message || 'Unknown');
-    }
-
+    
 
 
   } catch (error) {
