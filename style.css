@@ -269,7 +269,6 @@ header {
   height: 100%;
   width: 200px;
   position: relative;
-  cursor: pointer;
 
 }
 
@@ -872,7 +871,7 @@ footer {
 }
 
 
-#google-login-btn{
+#git-login-btn{
   width: 60%;
   display: flex;
   justify-content: space-evenly;
