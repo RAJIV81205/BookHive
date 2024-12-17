@@ -1,8 +1,0 @@
-{
-  "hosting": {
-    "site": "bookhive",
-
-    "public": "index.html",
-    ...
-  }
-}
