@@ -65,7 +65,7 @@ async function verifyToken() {
   }
 
   try {
-    const response = await fetch('https://bookhive-yxmn.onrender.com/verify', {
+    const response = await fetch('https://bookhive-fngz7jxp.b4a.run//verify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -104,15 +104,13 @@ async function verifyToken() {
 
 
 
-    
-
-
-  }else {
+    } else {
       console.error(data.message || 'Unknown');
     }
 
-      
-    catch (error) {
+
+
+  } catch (error) {
     console.error("unknown")
   }
 }
@@ -461,7 +459,7 @@ document.getElementById('login-btn').addEventListener('click', async () => {
   }
 
   try {
-    const response = await fetch('https://bookhive-yxmn.onrender.com/login', {
+    const response = await fetch('https://bookhive-fngz7jxp.b4a.run/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -539,7 +537,7 @@ document.getElementById('choose-signup-btn').addEventListener('click', () => {
 
     try {
 
-      const response = await fetch('https://bookhive-yxmn.onrender.com/signup', {
+      const response = await fetch('https://bookhive-fngz7jxp.b4a.run/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
