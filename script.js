@@ -65,7 +65,7 @@ async function verifyToken() {
   }
 
   try {
-    const response = await fetch('https://bookhive-yxmn.onrender.com/verify', {
+    const response = await fetch('http://localhost:3000/verify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -106,12 +106,26 @@ async function verifyToken() {
 
     } else {
       console.log(data.message || 'Unknown');
+      localStorage.removeItem('token')
+      localStorage.removeItem('username')
+      localStorage.removeItem('email')
+      localStorage.removeItem('mobile')
+      console.log('Token Expired');
+      document.getElementById('user-details').innerHTML = `<button class="login-page">Login Now</button>`;
+
     }
 
 
 
   } catch (error) {
     console.error("unknown")
+    localStorage.removeItem('token')
+    localStorage.removeItem('username')
+    localStorage.removeItem('email')
+    localStorage.removeItem('mobile')
+    console.log('Token Expired');
+    document.getElementById('user-details').innerHTML = `<button class="login-page">Login Now</button>`;
+
   }
 }
 
@@ -136,18 +150,18 @@ function updateUser() {
         <button id="sign-out-btn">Sign Out</button>`
 
 
-        document.querySelectorAll('#sign-out-btn').forEach(button=>{
-          button.addEventListener('click',()=>{
-            localStorage.removeItem('token')
-        localStorage.removeItem('username')
-        localStorage.removeItem('email')
-        localStorage.removeItem('mobile')
-        console.log('Token Expired');
-        location.reload();
+  document.querySelectorAll('#sign-out-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      localStorage.removeItem('token')
+      localStorage.removeItem('username')
+      localStorage.removeItem('email')
+      localStorage.removeItem('mobile')
+      console.log('Token Expired');
+      location.reload();
 
 
-          })
-        })
+    })
+  })
 
 }
 
@@ -228,11 +242,11 @@ async function fetchBooks(genre) {
     const response = await fetch('books.json');
     const books = await response.json();
 
-    if (genre=="All"){
+    if (genre == "All") {
       var fictionalBooks = books;
 
-    }else{
-    var fictionalBooks = books.filter(book => book.category === genre);
+    } else {
+      var fictionalBooks = books.filter(book => book.category === genre);
     }
 
 
@@ -456,6 +470,7 @@ function cartTotal() {
         </div>`
 
   document.getElementById('btn-container').style.display = "flex";
+  localStorage.setItem('price', total);
 
 }
 
@@ -502,7 +517,7 @@ document.getElementById('login-btn').addEventListener('click', async () => {
   }
 
   try {
-    const response = await fetch('https://bookhive-yxmn.onrender.com/login', {
+    const response = await fetch('http://localhost:3000/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -516,13 +531,14 @@ document.getElementById('login-btn').addEventListener('click', async () => {
     const data = await response.json();
 
     if (response.ok) {
-      alert('Login successful');
       console.log('User data:', data);
       localStorage.setItem('token', data.token)
       localStorage.setItem('username', data.user.name)
       localStorage.setItem('email', data.user.email)
       localStorage.setItem('mobile', data.user.mobile)
-      verifyToken();
+      alert('Login successful');
+
+      verifyToken()
 
       window.location.href = "index.html";
 
@@ -580,7 +596,7 @@ document.getElementById('choose-signup-btn').addEventListener('click', () => {
 
     try {
 
-      const response = await fetch('https://bookhive-yxmn.onrender.com/signup', {
+      const response = await fetch('http://localhost:3000/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -608,7 +624,7 @@ document.getElementById('choose-signup-btn').addEventListener('click', () => {
       console.error('Error:', error);
       alert('Something went wrong. Please try again later.');
       location.reload()
-    }
+    } 9
   });
 
 
@@ -620,3 +636,181 @@ document.getElementById('choose-signup-btn').addEventListener('click', () => {
 
 
 
+function checkout() {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    alert('Please login first');
+    window.location.href = "login.html"
+    return;
+  }
+
+
+  const username = localStorage.getItem('username');
+  const mobile = localStorage.getItem('mobile');
+  const email = localStorage.getItem('email');
+
+  document.getElementById('cart-container').style.display = "none";
+  document.getElementById('checkout-container').style.display = "none";
+  document.getElementById('btn-container').style.display = "none";
+
+  const paymentcon = document.getElementById('payment-container');
+  paymentcon.style.display = "flex";
+  document.getElementById("cart-title").innerText = "Payment Details";
+
+  document.getElementById('payment-name').value = username;
+  document.getElementById('payment-email').value = email;
+  document.getElementById('payment-mobile').value = mobile;
+
+  document.getElementById('submit-order').addEventListener('click', () => {
+    submitOrder(username, mobile, email);
+  })
+
+  window.location.href="#payment-container"
+
+
+
+}
+
+
+
+
+
+
+async function submitOrder(username, mobile, email) {
+  const orderNumber = Math.round(Math.random() * 1000000);
+  const add = document.getElementById('payment-address').value;
+  const pincode = document.getElementById('payment-pin').value;
+  const state = document.getElementById('payment-state').value;
+  const paytype = document.getElementById('payment-type').value;
+  const cart = JSON.parse(localStorage.getItem('cart'));
+  const cost = localStorage.getItem('price');
+
+  if (!add || !pincode || !state || !paytype || !cart || !cost) {
+    alert('Please fill all the details and ensure cart/price is not empty');
+    return;
+  }
+
+  if (pincode < 100000 || pincode > 999999) {
+    alert("Wrong Pincode");
+    location.reload()
+    return;
+  }
+
+
+  const items = [];
+  cart.forEach(item => {
+    if (item.isbn) {
+      items.push(item.isbn);
+    }
+  });
+
+  try {
+
+    const response = await fetch('http://localhost:3000/submit-order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        orderNumber: orderNumber,
+        name: username,
+        mobile: mobile,
+        email: email,
+        add: add,
+        pincode: parseInt(pincode),
+        state: state,
+        paytype: paytype,
+        items: items,
+        cost: parseFloat(cost)
+      })
+    });
+
+
+    const responseData = await response.json();
+
+    if (response.ok) {
+      console.log('Order Submitted Successfully:', responseData);
+      alert('Order Submitted Successfully');
+      displayConfirmation(orderNumber, username, mobile, email, add, pincode, state, paytype, items, cost)
+      
+    } else {
+      console.error('Error submitting order:', responseData);
+      alert('Error submitting order: ' + (responseData.message || 'Unknown error'));
+    }
+  } catch (error) {
+    console.error('Fetch error:', error);
+    alert('An error occurred while submitting the order. Please try again.');
+  }
+}
+
+
+function displayConfirmation(orderNumber, username, mobile, email, add, pincode, state, paytype, items, cost) {
+  window.location.href = "#confirm-container";
+  document.getElementById('confirm-container').style.display = "flex";
+
+  const table = document.getElementById('order-item-details');
+  const cart = JSON.parse(localStorage.getItem('cart'));
+
+
+  document.getElementById("order-details").innerHTML = `
+    <table>
+      <caption>Order Details</caption>
+      <tr>
+        <th>Order Number</th>
+        <td>${orderNumber}</td>
+      </tr>
+      <tr>
+        <th>Name</th>
+        <td>${username}</td>
+      </tr>
+      <tr>
+        <th>Email</th>
+        <td>${email}</td>
+      </tr>
+      <tr>
+        <th>Mobile</th>
+        <td>${mobile}</td>
+      </tr>
+      <tr>
+        <th>Address</th>
+        <td>${add}</td>
+      </tr>
+      <tr>
+        <th>Pincode</th>
+        <td>${pincode}</td>
+      </tr>
+      <tr>
+        <th>State</th>
+        <td>${state}</td>
+      </tr>
+      <tr>
+        <th>Payment Method</th>
+        <td>${paytype}</td>
+      </tr>
+    </table>`;
+
+
+  table.innerHTML = `<caption>Item Details</caption>
+  <tr> <th>Book Name</th> <th>Price</th>  </tr>`;
+
+
+  cart.forEach(item => {
+    if (item.isbn) {
+
+      const row = document.createElement('tr');
+      row.innerHTML = `<th>${item.name}</th><td>${item.price}</td>`;
+      table.appendChild(row);
+    }
+  });
+
+  localStorage.removeItem('cart');
+  localStorage.removeItem('price');
+
+
+
+
+  document.getElementById('close-popup').addEventListener('click',()=>{
+    window.location.href = "index.html"
+  })
+}
