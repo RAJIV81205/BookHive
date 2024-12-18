@@ -3,6 +3,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const navlinks = document.querySelectorAll(".navbar ul a")
   const params = new URLSearchParams(window.location.search);
   const genre = params.get("genre");
+  const booktitle = params.get("title")
+
+
+
+  if (booktitle) {
+    getbookbytitle(booktitle);
+  }
 
 
 
@@ -127,6 +134,109 @@ async function verifyToken() {
     document.getElementById('user-details').innerHTML = `<button class="login-page">Login Now</button>`;
 
   }
+}
+
+
+
+
+
+async function fetchSuggestions() {
+  const input = document.querySelector('.search-input').value;
+  document.querySelector('.search-bar').style.borderRadius = "25px";
+  document.querySelector('.suggestions').style.display = "none";
+
+  try {
+    const response = await fetch('books.json');
+    const data = await response.json();
+    document.querySelector('.suggestions').innerHTML = '';
+    if (input.length < 2) {
+      document.querySelector('.search-bar').style.borderRadius = "25px";
+      document.querySelector('.suggestions').style.display = "none";
+      return;
+    }
+
+
+    data.forEach(book => {
+      if (book.name.toLowerCase().includes(input.toLowerCase())) {
+        document.querySelector('.search-bar').style.borderRadius = "25px 25px 25px 0"
+        document.querySelector('.suggestions').style.display = "flex";
+        const suggestion = document.createElement('div');
+        suggestion.classList.add('suggestion');
+        suggestion.innerHTML = book.name;
+        document.querySelector('.suggestions').appendChild(suggestion);
+
+      }
+    })
+  } catch (error) {
+    console.error(error);
+  }
+
+
+  document.querySelectorAll('.suggestion').forEach(suggest => {
+    suggest.addEventListener('click', async function () {
+      document.querySelector('.search-input').value = suggest.innerHTML;
+      document.querySelector('.search-bar').style.borderRadius = "25px";
+      document.querySelector('.suggestions').innerHTML = '';
+      document.querySelector('.suggestions').style.display = "none"
+
+
+    })
+  })
+
+
+  document.querySelectorAll('.search-button').forEach(button => {
+    button.addEventListener('click', async function () {
+      const input = document.querySelector('.search-input').value;
+      window.location.href = `book.html?title=${input}`
+
+
+    })
+  })
+}
+
+
+
+
+async function getbookbytitle(booktitle) {
+
+  const container = document.getElementById("fictional-book-container");
+
+
+  try {
+    const response = await fetch('books.json');
+    const books = await response.json();
+
+
+    var fictionalBooks = books.filter(book => book.name === booktitle);
+
+
+
+    container.innerHTML = '';
+    fictionalBooks.forEach(book => {
+      const bookElement = document.createElement('div');
+      bookElement.classList.add('book-container');
+
+
+      bookElement.innerHTML = `
+        <img src="${book.image}" alt="${book.name}">
+        <h4>${book.name}</h4>
+        <p><s>₹${book.original_price}</s> ₹${book.price}</p>
+        <div class="btn-container">
+        <button class="wishlist-btn" data-isbn="${book.isbn}"><img src="https://i.postimg.cc/5t4Wf5PQ/e-commerce.png"></button>
+        <button class="add-to-cart-btn" data-isbn="${book.isbn}">Add to Cart</button>
+        </div>
+      `;
+
+      container.appendChild(bookElement);
+    });
+
+
+
+
+  } catch (error) {
+    console.error(error)
+  }
+
 }
 
 
@@ -666,7 +776,7 @@ function checkout() {
     submitOrder(username, mobile, email);
   })
 
-  window.location.href="#payment-container"
+  window.location.href = "#payment-container"
 
 
 
@@ -733,7 +843,7 @@ async function submitOrder(username, mobile, email) {
       console.log('Order Submitted Successfully:', responseData);
       alert('Order Submitted Successfully');
       displayConfirmation(orderNumber, username, mobile, email, add, pincode, state, paytype, items, cost)
-      
+
     } else {
       console.error('Error submitting order:', responseData);
       alert('Error submitting order: ' + (responseData.message || 'Unknown error'));
@@ -750,7 +860,7 @@ function displayConfirmation(orderNumber, username, mobile, email, add, pincode,
   document.getElementById('confirm-container').style.display = "flex";
 
   const table = document.getElementById('order-item-details');
-  const cart = JSON.parse(localStorage.getItem('cart'));
+  const cart = localStorage.getItem('cart-length');
 
 
   document.getElementById("order-details").innerHTML = `
@@ -788,21 +898,18 @@ function displayConfirmation(orderNumber, username, mobile, email, add, pincode,
         <th>Payment Method</th>
         <td>${paytype}</td>
       </tr>
+      <tr>
+        <th>Total Items</th>
+        <td>${cart - length}</td>
+      </tr>
+      <tr>
+        <th>Total Cost</th>
+        <td>₹ ${cost}</td>
+      </tr>
     </table>`;
 
 
-  table.innerHTML = `<caption>Item Details</caption>
-  <tr> <th>Book Name</th> <th>Price</th>  </tr>`;
 
-
-  cart.forEach(item => {
-    if (item.isbn) {
-
-      const row = document.createElement('tr');
-      row.innerHTML = `<th>${item.name}</th><td>${item.price}</td>`;
-      table.appendChild(row);
-    }
-  });
 
   localStorage.removeItem('cart');
   localStorage.removeItem('price');
@@ -810,7 +917,7 @@ function displayConfirmation(orderNumber, username, mobile, email, add, pincode,
 
 
 
-  document.getElementById('close-popup').addEventListener('click',()=>{
+  document.getElementById('close-popup').addEventListener('click', () => {
     window.location.href = "index.html"
   })
 }
