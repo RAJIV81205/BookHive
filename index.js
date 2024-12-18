@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors'); 
 const dotenv = require('dotenv');
 const helmet = require('helmet');
-const path = require('path);
+const path = require('path');
 
 
 dotenv.config();
