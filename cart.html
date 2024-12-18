@@ -49,7 +49,8 @@
             </a>
         </div>
         <div class="search-bar">
-            <input type="text" placeholder="Search Product..." class="search-input" />
+            <div class="suggestions"></div>
+            <input type="text" placeholder="Search Product..." class="search-input" oninput="fetchSuggestions()" />
             <select class="category-select">
                 <option>Select Category</option>
                 <option>Books</option>
@@ -250,17 +251,11 @@
         <div id="confirm-container">
             <h2>Thank You!!! 🎉</h2>
             <p>We have received your order</p>
-    
+
             <div class="order-details" id="order-details"></div>
-    
-            <div class="order-item-details">
-                
-                <table id="order-item-details">
-                </table>
-            </div>
             <button id="close-popup">Close</button>
         </div>
-    
+
     </div>
 
 
