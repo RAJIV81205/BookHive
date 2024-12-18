@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors'); 
 const dotenv = require('dotenv');
 const helmet = require('helmet');
-const path = require('path');
 
 
 dotenv.config();
@@ -14,16 +13,14 @@ const app = express();
 app.use(express.json());
 app.use(cors()); 
 app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"], 
-      imgSrc: ["*"],
+    helmet.contentSecurityPolicy({
+      directives: {
+        defaultSrc: ["'self'"],
+        imgSrc: ["*"], 
     
-    },
-  })
-);
-
-app.use(express.static(path.join(__dirname)));
+      },
+    })
+  );
 
 
 const PORT = process.env.PORT || 5000;
@@ -40,9 +37,9 @@ mongoose.connect(MONGODB_URI, {
 
 
 const userSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true, trim: true },
+    username: { type: String, required: true,  trim: true },
     mobile: { type: String, required: true },
-    email: { type: String, required: true, unique: true, lowercase: true },
+    email: { type: String, required: true,  lowercase: true },
     password: { type: String, required: true },
     time: { type: String }
 });
@@ -114,6 +111,64 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+
+const orderSchema = new mongoose.Schema({
+    orderNumber : {type:Number , unique:true},
+    name: { type: String, trim: true, required: true },
+    mobile: { type: String, required: true },
+    email: { type: String, lowercase: true, required: true },
+    add: { type: String, required: true },
+    pincode: { type: Number, required: true },
+    state: { type: String, required: true },
+    paytype: { type: String, required: true },
+    items: { type: Object, required: true },
+    cost: { type: Number, required: true }
+});
+
+const Order = mongoose.model('Order', orderSchema);
+
+
+app.post('/submit-order', async (req, res) => {
+    try {
+        console.log('Incoming request body:', req.body);
+
+        const { orderNumber ,name, mobile, email, add, pincode, state, paytype, items, cost } = req.body;
+
+        
+        if (!orderNumber || !name || !mobile || !email || !add || !pincode || !state || !paytype || !items || !cost) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+
+        
+        const newOrder = new Order({
+            orderNumber,
+            name,
+            mobile,
+            email,
+            add,
+            pincode,
+            state,
+            paytype,
+            items,
+            cost
+        });
+
+        await newOrder.save();
+
+        res.status(201).json({ message: 'Order Submitted Successfully' });
+    } catch (error) {
+        if (error.code === 11000) {
+            return res.status(400).json({ message: 'Duplicate entry detected' });
+        }
+
+        console.error('Error in /submit-order:', error.message);
+        res.status(500).json({ error: 'Internal Server Error', details: error.message });
+    }
+});
+
+
+
 
 app.post('/verify', async (req, res) => {
     try {
