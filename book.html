@@ -46,7 +46,8 @@
       </a>
     </div>
     <div class="search-bar">
-      <input type="text" placeholder="Search Product..." class="search-input" />
+      <div class="suggestions"></div>
+      <input type="text" placeholder="Search Product..." class="search-input" oninput="fetchSuggestions()"/>
       <select class="category-select">
         <option>Select Category</option>
         <option>Books</option>
