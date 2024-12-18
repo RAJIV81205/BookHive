@@ -224,6 +224,36 @@ header {
 
 
 
+.suggestions{
+  position: absolute;
+  height: fit-content;
+  max-height: 250px;
+  width: 382px;
+  background-color: #ffffff;
+  top: 92px;
+  z-index: 15;
+  border:1px  solid rgb(227, 224, 224);
+  border-top: none;
+  overflow-x: hidden;
+  display: none;
+  flex-direction: column;
+
+}
+
+.suggestions::-webkit-scrollbar{
+width: 0;
+}
+
+.suggestion{
+  width: 100%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestion:active{
+  background-color: rgb(222, 215, 215);
+}
+
 
 
 .search-input {
@@ -307,12 +337,12 @@ header {
 }
 
 #sign-out-btn{
-  background-color: rgb(244, 95, 95);
+  background-color: rgb(190, 22, 22);
   width: 100%;
   border-radius: 10px;
-  border: 1px solid var(--button-color);
+  border: 1px solid whitesmoke;
   padding: 5px;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   margin-top: 10px;
   cursor: pointer;
 }
@@ -994,13 +1024,13 @@ footer {
   
 }
 
-.order-details , .order-item-details{
+.order-details {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 30px 0;
-  overflow: scroll;
+  overflow: hidden;
 }
 
 #confirm-container table {
