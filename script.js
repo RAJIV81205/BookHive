@@ -867,7 +867,7 @@ function displayConfirmation(orderNumber, username, mobile, email, add, pincode,
   document.getElementById('confirm-container').style.display = "flex";
 
   const table = document.getElementById('order-item-details');
-  const cart = localStorage.getItem('cart-length');
+  const cart = localStorage.getItem('cart-total');
 
 
   document.getElementById("order-details").innerHTML = `
@@ -907,7 +907,7 @@ function displayConfirmation(orderNumber, username, mobile, email, add, pincode,
       </tr>
       <tr>
         <th>Total Items</th>
-        <td>${cart - length}</td>
+        <td>${cart}</td>
       </tr>
       <tr>
         <th>Total Cost</th>
