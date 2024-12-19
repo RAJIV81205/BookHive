@@ -415,7 +415,6 @@ async function fetchBooks(genre) {
         if (!cart.some(item => item.isbn === isbn)) {
           cart.push(book);
           localStorage.setItem('cart', JSON.stringify(cart));
-          alert(`${book.name} added to cart!`);
           updateCartCount()
           button.textContent = "Added"
         } else {
@@ -646,9 +645,10 @@ document.getElementById('login-btn').addEventListener('click', async () => {
       localStorage.setItem('username', data.user.name)
       localStorage.setItem('email', data.user.email)
       localStorage.setItem('mobile', data.user.mobile)
-      alert('Login successful');
+      
 
-      verifyToken()
+      verifyToken();
+      alert('Login successful');
 
       window.location.href = "index.html";
 
