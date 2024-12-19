@@ -14,14 +14,14 @@ const app = express();
 app.use(express.json());
 app.use(cors()); 
 app.use(
-    helmet.contentSecurityPolicy({
-      directives: {
-        defaultSrc: ["'self'"],
-        imgSrc: ["*"], 
-    
-      },
-    })
-  );
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["*"], 
+    },
+  })
+);
 
 app.use(express.static(path.join(__dirname)));
 
