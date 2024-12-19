@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cors = require('cors'); 
 const dotenv = require('dotenv');
-const helmet = require('helmet');
+
 const path = require('path');
 
 
@@ -13,15 +13,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors()); 
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["*"], 
-    },
-  })
-);
+
 
 app.use(express.static(path.join(__dirname)));
 
@@ -199,6 +191,3 @@ app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-app.get('/', (req, res) => {
-    res.send('Helmet is protecting your app!');
-  });
