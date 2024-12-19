@@ -137,6 +137,37 @@ async function verifyToken() {
 }
 
 
+function updateUser() {
+  const name = localStorage.getItem('username');
+  const email = localStorage.getItem('email');
+  const mobile = localStorage.getItem('mobile');
+
+  document.getElementById('user-details').innerHTML = ''
+
+
+  document.getElementById('user-details').innerHTML = `
+  <h3>${name}</h3>
+        <h5>${email}</h5>
+        <h5>${mobile}</h5>
+        <button id="sign-out-btn">Sign Out</button>`
+
+
+  document.querySelectorAll('#sign-out-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      localStorage.removeItem('token')
+      localStorage.removeItem('username')
+      localStorage.removeItem('email')
+      localStorage.removeItem('mobile')
+      console.log('Token Expired');
+      location.reload();
+
+
+    })
+  })
+
+}
+
+
 
 
 
@@ -245,35 +276,7 @@ async function getbookbytitle(booktitle) {
 
 
 
-function updateUser() {
-  const name = localStorage.getItem('username');
-  const email = localStorage.getItem('email');
-  const mobile = localStorage.getItem('mobile');
 
-  document.getElementById('user-details').innerHTML = ''
-
-
-  document.getElementById('user-details').innerHTML = `
-  <h3>${name}</h3>
-        <h5>${email}</h5>
-        <h5>${mobile}</h5>
-        <button id="sign-out-btn">Sign Out</button>`
-
-
-  document.querySelectorAll('#sign-out-btn').forEach(button => {
-    button.addEventListener('click', () => {
-      localStorage.removeItem('token')
-      localStorage.removeItem('username')
-      localStorage.removeItem('email')
-      localStorage.removeItem('mobile')
-      console.log('Token Expired');
-      location.reload();
-
-
-    })
-  })
-
-}
 
 
 
@@ -647,10 +650,14 @@ document.getElementById('login-btn').addEventListener('click', async () => {
       localStorage.setItem('mobile', data.user.mobile)
       
 
-      verifyToken();
+
       alert('Login successful');
 
-      window.location.href = "index.html";
+      if(localStorage.getItem('token')){
+        window.location.href = "index.html";
+      }
+
+      
 
 
     } else {
