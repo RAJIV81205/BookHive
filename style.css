@@ -162,11 +162,21 @@ header {
   align-items: center;
   border: 1px solid #dcdcdc;
   border-radius: 25px;
-  overflow: hidden;
+  position: relative;
+
   width: 80%;
   max-width: 400px;
   background-color: white;
   margin: 20px;
+}
+
+.search-bar-mobile input{
+  border-radius: 25px 0 0 25px;
+}
+
+.search-bar-mobile button{
+  border-radius: 0 25px 25px 0;
+  overflow: hidden;
 }
 
 .suggestions-mobile {
@@ -175,10 +185,10 @@ header {
   position: absolute;
   height: fit-content;
   max-height: 250px;
-  width: 60%;
+  width: 85%;
   max-width: 355px;
   background-color: #ffffff;
-  top: 132px;
+  top: 46px;
   z-index: 15;
   border: 1px solid rgb(227, 224, 224);
   border-top: none;
