@@ -227,6 +227,64 @@ async function fetchSuggestions() {
 
 
 
+async function fetchSuggestionsMobile(){
+  const input = document.querySelector('.search-input-mobile').value;
+  document.querySelector('.search-bar-mobile').style.borderRadius = "25px";
+  document.querySelector('.suggestions-mobile').style.display = "none";
+
+  try {
+    const response = await fetch('books.json');
+    const data = await response.json();
+    document.querySelector('.suggestions-mobile').innerHTML = '';
+    if (input.length < 2) {
+      document.querySelector('.search-bar-mobile').style.borderRadius = "25px";
+      document.querySelector('.suggestions-mobile').style.display = "none";
+      return;
+    }
+
+
+    data.forEach(book => {
+      if (book.name.toLowerCase().includes(input.toLowerCase())) {
+        document.querySelector('.search-bar-mobile').style.borderRadius = "25px 25px 25px 0"
+        document.querySelector('.suggestions-mobile').style.display = "flex";
+        const suggestion = document.createElement('div');
+        suggestion.classList.add('suggestion');
+        suggestion.innerHTML = book.name;
+        document.querySelector('.suggestions-mobile').appendChild(suggestion);
+
+      }
+    })
+  } catch (error) {
+    console.error(error);
+  }
+
+
+  document.querySelectorAll('.suggestion').forEach(suggest => {
+    suggest.addEventListener('click', async function () {
+      document.querySelector('.search-input-mobile').value = suggest.innerHTML;
+      document.querySelector('.search-bar-mobile').style.borderRadius = "25px";
+      document.querySelector('.suggestions-mobile').innerHTML = '';
+      document.querySelector('.suggestions-mobile').style.display = "none"
+
+
+    })
+  })
+
+
+
+  document.querySelectorAll('.search-button-mobile').forEach(button => {
+    button.addEventListener('click', async function () {
+      const input = document.querySelector('.search-input-mobile').value;
+      window.location.href = `book.html?title=${input}`
+
+
+    })
+  })
+
+}
+
+
+
 
 async function getbookbytitle(booktitle) {
 
@@ -648,16 +706,16 @@ document.getElementById('login-btn').addEventListener('click', async () => {
       localStorage.setItem('username', data.user.name)
       localStorage.setItem('email', data.user.email)
       localStorage.setItem('mobile', data.user.mobile)
-      
+
 
 
       alert('Login successful');
 
-      if(localStorage.getItem('token')){
+      if (localStorage.getItem('token')) {
         window.location.href = "index.html";
       }
 
-      
+
 
 
     } else {
