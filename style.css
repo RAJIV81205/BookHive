@@ -144,7 +144,9 @@ header {
   background-color: white;
 }
 
-.navbar-mobile{
+
+
+.navbar-mobile {
   display: none;
   flex-direction: row;
   width: 100%;
@@ -152,10 +154,10 @@ header {
   justify-content: center;
   align-items: center;
 
-
 }
 
 .search-bar-mobile {
+
   display: flex;
   align-items: center;
   border: 1px solid #dcdcdc;
@@ -167,8 +169,26 @@ header {
   margin: 20px;
 }
 
+.suggestions-mobile {
+  border-radius: 0 0 25px 25px;
+  font-size: 0.8rem;
+  position: absolute;
+  height: fit-content;
+  max-height: 250px;
+  width: 60%;
+  max-width: 355px;
+  background-color: #ffffff;
+  top: 132px;
+  z-index: 15;
+  border: 1px solid rgb(227, 224, 224);
+  border-top: none;
+  overflow-x: hidden;
+  display: none;
+  flex-direction: column;
+}
 
-.hamburger-menu{
+
+.hamburger-menu {
   width: 20%;
   height: 100%;
   display: flex;
@@ -178,8 +198,8 @@ header {
   position: relative;
 }
 
-.hamburger-menu img{
-  height:32px;
+.hamburger-menu img {
+  height: 32px;
   width: 32px;
 }
 
@@ -224,7 +244,7 @@ header {
 
 
 
-.suggestions{
+.suggestions {
   position: absolute;
   height: fit-content;
   max-height: 250px;
@@ -232,7 +252,7 @@ header {
   background-color: #ffffff;
   top: 92px;
   z-index: 15;
-  border:1px  solid rgb(227, 224, 224);
+  border: 1px solid rgb(227, 224, 224);
   border-top: none;
   overflow-x: hidden;
   display: none;
@@ -240,17 +260,17 @@ header {
 
 }
 
-.suggestions::-webkit-scrollbar{
-width: 0;
+.suggestions::-webkit-scrollbar {
+  width: 0;
 }
 
-.suggestion{
+.suggestion {
   width: 100%;
   padding: 10px;
   cursor: pointer;
 }
 
-.suggestion:active{
+.suggestion:active {
   background-color: rgb(222, 215, 215);
 }
 
@@ -302,13 +322,13 @@ width: 0;
 
 }
 
-.account{
+.account {
   cursor: pointer;
 }
 
 
 
-#user-details{
+#user-details {
   padding: 20px 10px;
   display: none;
   justify-content: space-evenly;
@@ -329,14 +349,14 @@ width: 0;
   overflow: hidden;
 }
 
-#user-details h3{
-  
+#user-details h3 {
+
   text-decoration: underline;
   margin-bottom: 10px;
 
 }
 
-#sign-out-btn{
+#sign-out-btn {
   background-color: rgb(190, 22, 22);
   width: 100%;
   border-radius: 10px;
@@ -347,14 +367,14 @@ width: 0;
   cursor: pointer;
 }
 
-#sign-out-btn:active{
+#sign-out-btn:active {
   background-color: #333333;
   color: var(--button-color);
 }
 
 
 
-.login-page{
+.login-page {
   background-color: #45a049;
   padding: 10px;
   border: 1px solid whitesmoke;
@@ -499,7 +519,7 @@ width: 0;
   align-items: center;
 }
 
-.genre-card h3{
+.genre-card h3 {
   color: black;
 }
 
@@ -611,9 +631,9 @@ footer {
   justify-content: center;
   border-radius: 5px;
   border: none;
-  background-color:rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
   cursor: pointer;
-  
+
 
 
 }
@@ -628,7 +648,7 @@ footer {
 
 }
 
-.wishlist-btn img:hover{
+.wishlist-btn img:hover {
   filter: drop-shadow(2px 2px 8px #ff0000);
 
 }
@@ -690,28 +710,30 @@ footer {
   }
 
   #fictional-book-container {
+    width: 100%;
     display: grid;
     grid-template-columns: auto auto;
+    column-gap: 10px;
   }
 
-
-
-}
-
-@media screen and (max-width:650px) {
   .book-container {
-    width: 95%;
+    width: 100%;
     margin: 5px;
     border-radius: 10px;
     border: 1px solid rgb(184, 183, 183);
 
     justify-content: flex-start;
   }
+
+
+
 }
 
 
 
-#cart-container , #wishlist-container{
+
+#cart-container,
+#wishlist-container {
   margin-top: 25px;
   width: 100%;
   display: flex;
@@ -772,7 +794,7 @@ footer {
 }
 
 
-#checkout-container{
+#checkout-container {
   margin: 25px 0;
   padding: 20px 0;
   align-items: center;
@@ -786,19 +808,21 @@ footer {
   height: fit-content;
 }
 
-#checkout-container h1{
+#checkout-container h1 {
   margin-bottom: 25px;
-  
+
 }
 
-#checkout-container span{
+#checkout-container span {
   width: 90%;
   border: 2px solid black;
   border-radius: 2px;
   margin: 10px 0;
 }
 
-.check-price , .taxes , .total-price {
+.check-price,
+.taxes,
+.total-price {
   width: 90%;
   display: flex;
   flex-direction: row;
@@ -807,7 +831,7 @@ footer {
   align-items: center;
 }
 
-#btn-container{
+#btn-container {
   display: none;
   flex-direction: row;
   flex-wrap: wrap;
@@ -819,7 +843,7 @@ footer {
 
 }
 
-#checkout-btn{
+#checkout-btn {
   font-size: 1.1rem;
   height: 50px;
   width: 220px;
@@ -831,7 +855,7 @@ footer {
   cursor: pointer;
 }
 
-#clear-cart-btn{
+#clear-cart-btn {
   cursor: pointer;
   font-size: 1.1rem;
   height: 50px;
@@ -843,12 +867,12 @@ footer {
   padding: 5px 12px;
 }
 
-.user-container{
+.user-container {
   padding: 25px 5px;
   margin-top: 30px;
   width: 90%;
   max-width: 400px;
-  height:fit-content;
+  height: fit-content;
   background-color: var(--card-background);
   border: 1px solid rgba(128, 128, 128, 0.407);
   border-radius: 8px;
@@ -859,7 +883,7 @@ footer {
   justify-content: center;
 }
 
-.btn-selection{
+.btn-selection {
   padding: 5px 0;
   overflow: hidden;
   width: 90%;
@@ -873,7 +897,8 @@ footer {
 
 }
 
-#choose-login-btn , #choose-signup-btn{
+#choose-login-btn,
+#choose-signup-btn {
   width: 100%;
   z-index: 2;
 
@@ -883,7 +908,7 @@ footer {
   cursor: pointer;
 }
 
-.selected-btn{
+.selected-btn {
   background-color: var(--button-color);
   border: 1px solid yellow;
   top: 0;
@@ -894,10 +919,10 @@ footer {
   border-radius: 25px;
   transition: transform 0.4s ease-in-out, background-color 0.3s ease;
   z-index: 1;
-  transform: translateX(0%) ;
+  transform: translateX(0%);
 }
 
-#main-user-container{
+#main-user-container {
   display: flex;
   flex-direction: column;
   width: 90%;
@@ -906,21 +931,22 @@ footer {
   justify-content: space-evenly;
 }
 
-#main-user-container label{
+#main-user-container label {
   font-size: 0.85rem;
   margin-bottom: 5px;
   margin-left: 8px;
 
 }
 
-#main-user-container input{
-  padding: 10px 8px ;
+#main-user-container input {
+  padding: 10px 8px;
   border-radius: 15px;
   border: 1px solid var(--section-background);
   margin-bottom: 20px;
 }
 
-#main-user-container #login-btn , #main-user-container #signup-btn {
+#main-user-container #login-btn,
+#main-user-container #signup-btn {
   background-color: var(--button-color);
   border: 2px solid var(--section-background);
   padding: 10px;
@@ -931,7 +957,7 @@ footer {
 }
 
 
-#git-login-btn{
+#git-login-btn {
   width: 60%;
   display: flex;
   justify-content: space-evenly;
@@ -943,7 +969,7 @@ footer {
   margin: 20px 0;
 }
 
-#payment-container{
+#payment-container {
   margin: 50px 0;
   display: none;
   flex-direction: column;
@@ -958,7 +984,7 @@ footer {
 
 }
 
-.det-container{
+.det-container {
   width: 90%;
   display: flex;
   flex-direction: column;
@@ -966,7 +992,8 @@ footer {
   margin: 30px 0;
 }
 
-.det-container input , .det-container select{
+.det-container input,
+.det-container select {
 
   padding: 10px;
 
@@ -976,28 +1003,28 @@ footer {
   letter-spacing: 1px;
 }
 
-.det-container label{
+.det-container label {
   font-size: 0.85rem;
   padding-left: 5px;
   margin-bottom: 5px;
   letter-spacing: 0.8px;
 }
 
-#submit-order{
+#submit-order {
   background-color: var(--button-color);
   padding: 10px;
   border-radius: 25px;
   border: 2px solid black;
   font-size: 1rem;
-  transition: letter-spacing 0.3s , background-color 0.3s , color 0.3s , border 0.3s;
+  transition: letter-spacing 0.3s, background-color 0.3s, color 0.3s, border 0.3s;
   cursor: pointer;
 }
 
-#submit-order:hover{
+#submit-order:hover {
   letter-spacing: 1px;
 }
 
-#submit-order:active{
+#submit-order:active {
   background-color: var(--primary-color);
   color: var(--button-color);
   border: 2px solid var(--button-color);
@@ -1005,7 +1032,7 @@ footer {
 }
 
 
-#confirm-container{
+#confirm-container {
   position: absolute;
   padding: 25px 0;
   display: none;
@@ -1020,8 +1047,8 @@ footer {
   justify-content: center;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 50px  rgb(142, 190, 178);
-  
+  box-shadow: 0 0 50px rgb(142, 190, 178);
+
 }
 
 .order-details {
@@ -1041,11 +1068,12 @@ footer {
 
 }
 
-#confirm-container table th{
+#confirm-container table th {
   background-color: rgb(72, 124, 72);
 }
 
-#confirm-container table th , #confirm-container table td {
+#confirm-container table th,
+#confirm-container table td {
   background-color: rgb(232, 244, 232);
   border: 1px solid rgba(20, 128, 29, 0.449);
   padding: 8px 0;
@@ -1054,7 +1082,7 @@ footer {
 
 }
 
-#close-popup{
+#close-popup {
   background-color: rgb(223, 109, 109);
   border: 1px solid rgb(0, 0, 0);
   padding: 10px 25px;
