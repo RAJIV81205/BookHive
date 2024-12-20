@@ -87,11 +87,12 @@
   </header>
   <div class="navbar-mobile">
     <div class="search-bar-mobile">
-      <input type="text" placeholder="Search Product..." class="search-input" />
-      <button class="search-button">
+      <div class="suggestions-mobile"></div>
+      <input type="text" placeholder="Search Product..." class="search-input search-input-mobile"  oninput="fetchSuggestionsMobile()" />
+      <button class="search-button-mobile search-button">
         <img src="https://i.postimg.cc/XJXMCj6V/loupe.png" alt="Search" />
       </button>
-
+      
     </div>
     <div class="hamburger-menu">
       <img src="https://i.postimg.cc/kG0SsfHL/more.png" alt="hamburger">
