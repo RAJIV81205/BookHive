@@ -1,104 +1,109 @@
-BookHive
+# BookHive
 
 BookHive is a web application that allows users to browse and order books online. The platform enables users to create accounts, log in, add books to their cart, and place orders seamlessly.
 
-Features
+## Features
 
-User Authentication: Secure sign-up and login functionality with password encryption using bcrypt.
+- **User Authentication**: Secure sign-up and login functionality with password encryption using bcrypt.
+- **Browse Books**: Users can explore a variety of books across multiple genres.
+- **Add to Cart**: Add books to the cart and review them before placing an order.
+- **Order Placement**: Submit orders with detailed address and payment information.
+- **Order Confirmation**: View order confirmation details after successful placement.
+- **Backend API**: Robust backend built with Node.js and Express.
+- **Database**: MongoDB is used to store user details, orders, and book information.
 
-Browse Books: Users can explore a variety of books across multiple genres.
+## Tech Stack
 
-Add to Cart: Add books to the cart and review them before placing an order.
+- **Frontend**: HTML, CSS, JavaScript
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB Atlas
+- **Security**: Password encryption with bcrypt and JSON Web Token (JWT) for authentication.
 
-Order Placement: Submit orders with detailed address and payment information.
+## Installation
 
-Order Confirmation: View order confirmation details after successful placement.
+1. Install dependencies:
 
-Backend API: Robust backend built with Node.js and Express.
+   ```bash
+   npm install
+   ```
 
-Database: MongoDB is used to store user details, orders, and book information.
+2. Set up environment variables:
+   Create a `.env` file in the root directory and add the following:
 
-Tech Stack
+   ```env
+   PORT=5000
+   MONGODB_URI=<your-mongodb-uri>
+   JWT_SECRET=<your-jwt-secret>
+   ```
 
-Frontend: HTML, CSS, JavaScript
+3. Start the server:
 
-Backend: Node.js, Express.js
+   ```bash
+   npm start
+   ```
 
-Database: MongoDB Atlas
+4. Access the application at `http://localhost:5000`.
 
-Security: Password encryption with bcrypt and JSON Web Token (JWT) for authentication.
+## API Endpoints
 
-Installation
+### User Authentication
 
-Install dependencies:
+- **POST /signup**: Register a new user.
 
-npm install
+  ```json
+  {
+    "username": "JohnDoe",
+    "mobile": "1234567890",
+    "email": "johndoe@example.com",
+    "password": "password123"
+  }
+  ```
 
-Set up environment variables:
-Create a .env file in the root directory and add the following:
+- **POST /login**: Log in an existing user.
 
-PORT=5000
-MONGODB_URI=<your-mongodb-uri>
-JWT_SECRET=<your-jwt-secret>
+  ```json
+  {
+    "email": "johndoe@example.com",
+    "password": "password123"
+  }
+  ```
 
-Start the server:
+### Orders
 
-npm start
+- **POST /submit-order**: Submit a new book order.
 
-Access the application at http://localhost:5000.
+  ```json
+  {
+    "name": "John Doe",
+    "Ordermobile": "1234567890",
+    "Orderemail": "johndoe@example.com",
+    "add": "123 Main Street",
+    "pincode": 123456,
+    "state": "California",
+    "paytype": "Credit Card",
+    "items": ["book1", "book2"],
+    "cost": 500
+  }
+  ```
 
-API Endpoints
+- **POST /verify**: Verify the user token.
 
-User Authentication
+  ```json
+  {
+    "token": "<jwt-token>"
+  }
+  ```
 
-POST /signup: Register a new user.
+## Known Issues
 
-{
-  "username": "JohnDoe",
-  "mobile": "1234567890",
-  "email": "johndoe@example.com",
-  "password": "password123"
-}
+- Inline event handlers may conflict with CSP if strict policies are applied.
+- Ensure the MongoDB URI and JWT secret are configured correctly.
 
-POST /login: Log in an existing user.
-
-{
-  "email": "johndoe@example.com",
-  "password": "password123"
-}
-
-Orders
-
-POST /submit-order: Submit a new book order.
-
-{
-  "name": "John Doe",
-  "Ordermobile": "1234567890",
-  "Orderemail": "johndoe@example.com",
-  "add": "123 Main Street",
-  "pincode": 123456,
-  "state": "California",
-  "paytype": "Credit Card",
-  "items": ["book1", "book2"],
-  "cost": 500
-}
-
-POST /verify: Verify the user token.
-
-{
-  "token": "<jwt-token>"
-}
-
-Known Issues
-
-Inline event handlers may conflict with CSP if strict policies are applied.
-
-Ensure the MongoDB URI and JWT secret are configured correctly.
-
-Contributing
+## Contributing
 
 Contributions are welcome! Please fork the repository and create a pull request.
 
-License
+## License
 
 This project is licensed under the MIT License.
+
