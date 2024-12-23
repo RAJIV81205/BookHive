@@ -7,6 +7,9 @@
     <title>Login - BookHive</title>
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/256/8832/8832880.png" type="image/x-icon">
+    <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js"></script>
+</head>
 
 
 <body>
@@ -26,13 +29,15 @@
             <label for="password">Password</label>
             <input type="password" name="password" id="login-password" placeholder="********">
             <button id="login-btn">Login</button>
-            
+
         </div>
         <p>Or</p>
-        <button id="git-login-btn">
-            <img src="https://logos-world.net/wp-content/uploads/2020/11/GitHub-Symbol.png" alt="Git Logo" width="20" />
-            Login with Github
+        <button id="google-login-btn">
+            <img src="https://cdn4.iconfinder.com/data/icons/logos-brands-7/512/google_logo-google_icongoogle-512.png" alt="Google Logo" width="20" />
+            Login with Google
         </button>
+
+    
     </div>
 
 
@@ -52,8 +57,9 @@
 
 
 
-    <script src="script.js"></script>
-    
+    <script type="module" src="script.js"></script>
+
+
 
 </body>
 
