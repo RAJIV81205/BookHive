@@ -169,7 +169,7 @@ function updateUser() {
 
 
 
-
+try{
 
 document.querySelector('.search-input').addEventListener('input', async ()=> {
   const input = document.querySelector('.search-input').value;
@@ -224,9 +224,18 @@ document.querySelector('.search-input').addEventListener('input', async ()=> {
     })
   })
 })
+}
+catch(error){
+  console.log(error);
+}
 
 
 
+
+
+
+
+try{
 document.querySelector('.search-input-mobile').addEventListener('input', async ()=>{
   const input = document.querySelector('.search-input-mobile').value;
   document.querySelector('.search-bar-mobile').style.borderRadius = "25px";
@@ -282,6 +291,10 @@ document.querySelector('.search-input-mobile').addEventListener('input', async (
   })
 
 })
+}
+catch(error){
+  console.log(error);
+}
 
 
 
@@ -644,15 +657,21 @@ function cartTotal() {
 
 }
 
-
+try{
 document.getElementById('clear-cart-btn').addEventListener('click' , ()=>{
   localStorage.removeItem('cart');
   loadCart();
 
 })
+}catch(error){
+  console.log(error);
+}
 
 
 
+
+
+try{
 document.getElementById('checkout-btn').addEventListener('click' , ()=>{
   const token = localStorage.getItem('token');
 
@@ -688,8 +707,12 @@ document.getElementById('checkout-btn').addEventListener('click' , ()=>{
 
 
 })
+}
+catch(error){
+  console.log(error);
+}
 
-
+try{
 document.getElementById('choose-login-btn').addEventListener('click', () => {
   document.querySelector('.selected-btn').style.transform = "translateX(0%)";
 
@@ -705,6 +728,10 @@ document.getElementById('choose-login-btn').addEventListener('click', () => {
 
 
 });
+}
+catch(error){
+  console.log(error);
+}
 
 
 
@@ -714,7 +741,7 @@ document.getElementById('choose-login-btn').addEventListener('click', () => {
 
 
 
-
+try{
 document.getElementById('login-btn').addEventListener('click', async () => {
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
@@ -766,6 +793,8 @@ document.getElementById('login-btn').addEventListener('click', async () => {
     location.reload()
   }
 });
+}catch(error){
+  console.error(error)
 }
 
 
@@ -775,7 +804,7 @@ document.getElementById('login-btn').addEventListener('click', async () => {
 
 
 
-
+try{
 
 document.getElementById('choose-signup-btn').addEventListener('click', () => {
   document.querySelector('.selected-btn').style.transform = "translateX(100%)";
@@ -846,7 +875,10 @@ document.getElementById('choose-signup-btn').addEventListener('click', () => {
 
 
 })
+}catch(error){
+  console.error(error)
 }
+
 
 
 
