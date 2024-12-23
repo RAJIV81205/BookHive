@@ -171,7 +171,7 @@ function updateUser() {
 
 
 
-async function fetchSuggestions() {
+document.querySelector('.search-input').addEventListener('input', async ()=> {
   const input = document.querySelector('.search-input').value;
   document.querySelector('.search-bar').style.borderRadius = "25px";
   document.querySelector('.suggestions').style.display = "none";
@@ -223,11 +223,11 @@ async function fetchSuggestions() {
 
     })
   })
-}
+})
 
 
 
-async function fetchSuggestionsMobile() {
+document.querySelector('.search-input-mobile').addEventListener('input', async ()=>{
   const input = document.querySelector('.search-input-mobile').value;
   document.querySelector('.search-bar-mobile').style.borderRadius = "25px";
   document.querySelector('.suggestions-mobile').style.display = "none";
@@ -281,7 +281,7 @@ async function fetchSuggestionsMobile() {
     })
   })
 
-}
+})
 
 
 
@@ -645,11 +645,48 @@ function cartTotal() {
 }
 
 
-function clearCart() {
+document.getElementById('clear-cart-btn').addEventListener('click' , ()=>{
   localStorage.removeItem('cart');
   loadCart();
 
-}
+})
+
+
+document.getElementById('checkout-btn').addEventListener('click' , ()=>{
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    alert('Please login first');
+    window.location.href = "login.html"
+    return;
+  }
+
+
+  const username = localStorage.getItem('username');
+  const mobile = localStorage.getItem('mobile');
+  const email = localStorage.getItem('email');
+
+  document.getElementById('cart-container').style.display = "none";
+  document.getElementById('checkout-container').style.display = "none";
+  document.getElementById('btn-container').style.display = "none";
+
+  const paymentcon = document.getElementById('payment-container');
+  paymentcon.style.display = "flex";
+  document.getElementById("cart-title").innerText = "Payment Details";
+
+  document.getElementById('payment-name').value = username;
+  document.getElementById('payment-email').value = email;
+  document.getElementById('payment-mobile').value = mobile;
+
+  document.getElementById('submit-order').addEventListener('click', () => {
+    submitOrder(username, mobile, email);
+  })
+
+  window.location.href = "#payment-container"
+
+
+
+})
 
 
 document.getElementById('choose-login-btn').addEventListener('click', () => {
@@ -676,7 +713,7 @@ document.getElementById('choose-login-btn').addEventListener('click', () => {
 
 
 
-
+try{
 document.getElementById('login-btn').addEventListener('click', async () => {
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
@@ -728,6 +765,9 @@ document.getElementById('login-btn').addEventListener('click', async () => {
     location.reload()
   }
 });
+}catch(error){
+  console.error(error)
+}
 
 
 
@@ -736,7 +776,7 @@ document.getElementById('login-btn').addEventListener('click', async () => {
 
 
 
-
+try{
 
 document.getElementById('choose-signup-btn').addEventListener('click', () => {
   document.querySelector('.selected-btn').style.transform = "translateX(100%)";
@@ -799,7 +839,7 @@ document.getElementById('choose-signup-btn').addEventListener('click', () => {
       console.error('Error:', error);
       alert('Something went wrong. Please try again later.');
       location.reload()
-    } 9
+    } 
   });
 
 
@@ -807,45 +847,14 @@ document.getElementById('choose-signup-btn').addEventListener('click', () => {
 
 
 })
-
-
-
-
-function checkout() {
-  const token = localStorage.getItem('token');
-
-  if (!token) {
-    alert('Please login first');
-    window.location.href = "login.html"
-    return;
-  }
-
-
-  const username = localStorage.getItem('username');
-  const mobile = localStorage.getItem('mobile');
-  const email = localStorage.getItem('email');
-
-  document.getElementById('cart-container').style.display = "none";
-  document.getElementById('checkout-container').style.display = "none";
-  document.getElementById('btn-container').style.display = "none";
-
-  const paymentcon = document.getElementById('payment-container');
-  paymentcon.style.display = "flex";
-  document.getElementById("cart-title").innerText = "Payment Details";
-
-  document.getElementById('payment-name').value = username;
-  document.getElementById('payment-email').value = email;
-  document.getElementById('payment-mobile').value = mobile;
-
-  document.getElementById('submit-order').addEventListener('click', () => {
-    submitOrder(username, mobile, email);
-  })
-
-  window.location.href = "#payment-container"
-
-
-
+}catch(error){
+  console.error(error)
 }
+
+
+
+
+
 
 
 
@@ -992,67 +1001,6 @@ function displayConfirmation(orderNumber, username, mobile, email, add, pincode,
 
 
 
-
-
-
-
-
-
-// Import Firebase libraries
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
-
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCwTPAKgvU4EpX-YMDNXVn_kC_hKoC66m8",
-  authDomain: "bookhive-99.firebaseapp.com",
-  projectId: "bookhive-99",
-  storageBucket: "bookhive-99.firebasestorage.app",
-  messagingSenderId: "1087067588892",
-  appId: "1:1087067588892:web:d61d9723c18e68022292d9",
-  measurementId: "G-RGFFYR6BN4"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-
-
-document.getElementById("google-login-btn").addEventListener("click", async () => {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-
-
-    const response = await fetch('https://bookhive-yxmn.onrender.com/google-signin', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: user.email,
-        name: user.displayName,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-
-      localStorage.setItem('token', data.token)
-      localStorage.setItem('username', data.user.name)
-      localStorage.setItem('email', data.user.email)
-      localStorage.setItem('mobile', data.user.mobile)
-      alert('Login successful!');
-      window.location.href = 'index.html'
-    } else {
-      alert(data.message);
-    }
-  } catch (error) {
-    console.error('Error signing in with Google:', error);
-  }
-});
 
 
 
