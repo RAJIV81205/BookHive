@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors'); 
 const dotenv = require('dotenv');
 
-const path = require('path');
 
 
 dotenv.config();
@@ -15,10 +14,8 @@ app.use(express.json());
 app.use(cors()); 
 
 
-app.use(express.static(path.join(__dirname)));
 
-
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -31,16 +28,16 @@ mongoose.connect(MONGODB_URI, {
     .catch(err => console.error('Error connecting to MongoDB:', err));
 
 
-const userSchema = new mongoose.Schema({
-    username: { type: String, required: true,  trim: true },
-    mobile: { type: String, required: true },
-    email: { type: String, required: true,  lowercase: true },
-    password: { type: String, required: true },
-    time: { type: String }
-});
-
-const User = mongoose.model('User', userSchema);
-
+    const userSchema = new mongoose.Schema({
+        username: { type: String, required: true, trim: true },
+        mobile: { type: String, default: '' }, 
+        email: { type: String, required: true, lowercase: true, unique: true },
+        password: { type: String, default: '' }, 
+        time: { type: String },
+    });
+    
+    const User = mongoose.model('User', userSchema);
+    
 
 
 
@@ -106,6 +103,49 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+
+
+app.post('/google-signin', async (req, res) => {
+    try {
+        const { email, name } = req.body;
+
+        
+        let user = await User.findOne({ email });
+        if (!user) {
+            
+            user = new User({
+                username: name,
+                mobile: '', 
+                email,
+                password: '', 
+                time: new Date().toISOString(),
+            });
+
+            await user.save();
+        }
+
+        
+        const token = jwt.sign(
+            { id: user._id },
+            JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.status(200).json({
+            message: 'Login successful',
+            token,
+            user: {
+                name: user.username,
+                mobile: user.mobile,
+                email: user.email,
+            },
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 
 const orderSchema = new mongoose.Schema({
