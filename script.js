@@ -713,7 +713,7 @@ document.getElementById('choose-login-btn').addEventListener('click', () => {
 
 
 
-try{
+
 document.getElementById('login-btn').addEventListener('click', async () => {
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
@@ -765,8 +765,6 @@ document.getElementById('login-btn').addEventListener('click', async () => {
     location.reload()
   }
 });
-}catch(error){
-  console.error(error)
 }
 
 
@@ -776,7 +774,7 @@ document.getElementById('login-btn').addEventListener('click', async () => {
 
 
 
-try{
+
 
 document.getElementById('choose-signup-btn').addEventListener('click', () => {
   document.querySelector('.selected-btn').style.transform = "translateX(100%)";
@@ -847,10 +845,7 @@ document.getElementById('choose-signup-btn').addEventListener('click', () => {
 
 
 })
-}catch(error){
-  console.error(error)
 }
-
 
 
 
