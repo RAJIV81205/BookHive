@@ -652,6 +652,7 @@ document.getElementById('clear-cart-btn').addEventListener('click' , ()=>{
 })
 
 
+
 document.getElementById('checkout-btn').addEventListener('click' , ()=>{
   const token = localStorage.getItem('token');
 
