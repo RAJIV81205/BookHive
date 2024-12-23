@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wishlist</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/256/8832/8832880.png" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wishlist</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/256/8832/8832880.png" type="image/x-icon">
+
 </head>
+
 <body>
-    <div id="loader-container">
+  <div id="loader-container">
     <div id="loader"></div>
   </div>
   <div class="info-bar">
@@ -46,7 +49,7 @@
     </div>
     <div class="search-bar">
       <div class="suggestions"></div>
-      <input type="text" placeholder="Search Product..." class="search-input" oninput="fetchSuggestions()"/>
+      <input type="text" placeholder="Search Product..." class="search-input" />
       <select class="category-select">
         <option>Select Category</option>
         <option>Books</option>
@@ -65,13 +68,13 @@
           <img src="https://i.postimg.cc/5t4Wf5PQ/e-commerce.png" alt="wishlist">
         </div>
       </a>
-      
-        <div class="account">
-          <img src="https://i.postimg.cc/MTLC0Cz1/user.png" alt="user">
-          
-        </div>
-        
-      
+
+      <div class="account">
+        <img src="https://i.postimg.cc/MTLC0Cz1/user.png" alt="user">
+
+      </div>
+
+
       <div id="user-details">
         <button class="login-page">Login Now</button>
       </div>
@@ -87,11 +90,12 @@
   <div class="navbar-mobile">
     <div class="search-bar-mobile">
       <div class="suggestions-mobile"></div>
-      <input type="text" placeholder="Search Product..." class="search-input search-input-mobile"  oninput="fetchSuggestionsMobile()" />
+      <input type="text" placeholder="Search Product..." class="search-input search-input-mobile"
+        />
       <button class="search-button-mobile search-button">
         <img src="https://i.postimg.cc/XJXMCj6V/loupe.png" alt="Search" />
       </button>
-      
+
     </div>
     <div class="hamburger-menu">
       <img src="https://i.postimg.cc/kG0SsfHL/more.png" alt="hamburger">
@@ -153,6 +157,7 @@
 
 
 
-  <script type="module" src="script.js"></script>
+  <script src="script.js"></script>
 </body>
+
 </html>
