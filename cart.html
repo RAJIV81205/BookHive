@@ -7,6 +7,7 @@
     <title>Cart</title>
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/256/8832/8832880.png" type="image/x-icon">
+
 </head>
 
 <body>
@@ -51,7 +52,7 @@
         </div>
         <div class="search-bar">
             <div class="suggestions"></div>
-            <input type="text" placeholder="Search Product..." class="search-input" oninput="fetchSuggestions()" />
+            <input type="text" placeholder="Search Product..." class="search-input" />
             <select class="category-select">
                 <option>Select Category</option>
                 <option>Books</option>
@@ -92,12 +93,12 @@
     <div class="navbar-mobile">
         <div class="search-bar-mobile">
             <div class="suggestions-mobile"></div>
-            <input type="text" placeholder="Search Product..." class="search-input search-input-mobile"  oninput="fetchSuggestionsMobile()" />
+            <input type="text" placeholder="Search Product..." class="search-input search-input-mobile"/>
             <button class="search-button-mobile search-button">
-              <img src="https://i.postimg.cc/XJXMCj6V/loupe.png" alt="Search" />
+                <img src="https://i.postimg.cc/XJXMCj6V/loupe.png" alt="Search" />
             </button>
-            
-          </div>
+
+        </div>
         <div class="hamburger-menu">
             <img src="https://i.postimg.cc/kG0SsfHL/more.png" alt="hamburger">
             <div class="menu-content">
@@ -191,8 +192,8 @@
     </div>
 
     <div id="btn-container">
-        <button id="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
-        <button id="clear-cart-btn" onclick="clearCart()">Clear Cart</button>
+        <button id="checkout-btn" >Proceed to Checkout</button>
+        <button id="clear-cart-btn" >Clear Cart</button>
 
     </div>
 
@@ -266,7 +267,8 @@
 
 
 
-    <script type="module" src="script.js"></script>
+    <script src="script.js"></script>
+    
 
 </body>
 
