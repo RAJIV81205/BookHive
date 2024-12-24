@@ -25,6 +25,7 @@ const provider = new GoogleAuthProvider();
 
 
 document.getElementById("google-login-btn").addEventListener("click", async () => {
+  document.querySelector('.login-loader-container').style.display = "flex"
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
@@ -55,6 +56,7 @@ document.getElementById("google-login-btn").addEventListener("click", async () =
       alert(data.message);
     }
   } catch (error) {
+    location.reload()
     console.error('Error signing in with Google:', error);
   }
 });
