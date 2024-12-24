@@ -743,6 +743,7 @@ catch(error){
 
 try{
 document.getElementById('login-btn').addEventListener('click', async () => {
+  document.querySelector('.login-loader-container').style.display = "flex"
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
 
@@ -825,6 +826,7 @@ document.getElementById('choose-signup-btn').addEventListener('click', () => {
 
 
   document.getElementById('signup-btn').addEventListener('click', async () => {
+    document.querySelector('.login-loader-container').style.display = "flex"
     const name = document.getElementById('signup-text').value;
     const mobile = document.getElementById('signup-number').value;
     const email = document.getElementById('signup-email').value;
