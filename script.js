@@ -169,63 +169,63 @@ function updateUser() {
 
 
 
-try{
+try {
 
-document.querySelector('.search-input').addEventListener('input', async ()=> {
-  const input = document.querySelector('.search-input').value;
-  document.querySelector('.search-bar').style.borderRadius = "25px";
-  document.querySelector('.suggestions').style.display = "none";
+  document.querySelector('.search-input').addEventListener('input', async () => {
+    const input = document.querySelector('.search-input').value;
+    document.querySelector('.search-bar').style.borderRadius = "25px";
+    document.querySelector('.suggestions').style.display = "none";
 
-  try {
-    const response = await fetch('books.json');
-    const data = await response.json();
-    document.querySelector('.suggestions').innerHTML = '';
-    if (input.length < 2) {
-      document.querySelector('.search-bar').style.borderRadius = "25px";
-      document.querySelector('.suggestions').style.display = "none";
-      return;
+    try {
+      const response = await fetch('books.json');
+      const data = await response.json();
+      document.querySelector('.suggestions').innerHTML = '';
+      if (input.length < 2) {
+        document.querySelector('.search-bar').style.borderRadius = "25px";
+        document.querySelector('.suggestions').style.display = "none";
+        return;
+      }
+
+
+      data.forEach(book => {
+        if (book.name.toLowerCase().includes(input.toLowerCase())) {
+          document.querySelector('.search-bar').style.borderRadius = "25px 25px 25px 0"
+          document.querySelector('.suggestions').style.display = "flex";
+          const suggestion = document.createElement('div');
+          suggestion.classList.add('suggestion');
+          suggestion.innerHTML = book.name;
+          document.querySelector('.suggestions').appendChild(suggestion);
+
+        }
+      })
+    } catch (error) {
+      console.error(error);
     }
 
 
-    data.forEach(book => {
-      if (book.name.toLowerCase().includes(input.toLowerCase())) {
-        document.querySelector('.search-bar').style.borderRadius = "25px 25px 25px 0"
-        document.querySelector('.suggestions').style.display = "flex";
-        const suggestion = document.createElement('div');
-        suggestion.classList.add('suggestion');
-        suggestion.innerHTML = book.name;
-        document.querySelector('.suggestions').appendChild(suggestion);
+    document.querySelectorAll('.suggestion').forEach(suggest => {
+      suggest.addEventListener('click', async function () {
+        document.querySelector('.search-input').value = suggest.innerHTML;
+        document.querySelector('.search-bar').style.borderRadius = "25px";
+        document.querySelector('.suggestions').innerHTML = '';
+        document.querySelector('.suggestions').style.display = "none"
 
-      }
+
+      })
     })
-  } catch (error) {
-    console.error(error);
-  }
 
 
-  document.querySelectorAll('.suggestion').forEach(suggest => {
-    suggest.addEventListener('click', async function () {
-      document.querySelector('.search-input').value = suggest.innerHTML;
-      document.querySelector('.search-bar').style.borderRadius = "25px";
-      document.querySelector('.suggestions').innerHTML = '';
-      document.querySelector('.suggestions').style.display = "none"
+    document.querySelectorAll('.search-button').forEach(button => {
+      button.addEventListener('click', async function () {
+        const input = document.querySelector('.search-input').value;
+        window.location.href = `book.html?title=${input}`
 
 
+      })
     })
   })
-
-
-  document.querySelectorAll('.search-button').forEach(button => {
-    button.addEventListener('click', async function () {
-      const input = document.querySelector('.search-input').value;
-      window.location.href = `book.html?title=${input}`
-
-
-    })
-  })
-})
 }
-catch(error){
+catch (error) {
   console.log(error);
 }
 
@@ -235,64 +235,64 @@ catch(error){
 
 
 
-try{
-document.querySelector('.search-input-mobile').addEventListener('input', async ()=>{
-  const input = document.querySelector('.search-input-mobile').value;
-  document.querySelector('.search-bar-mobile').style.borderRadius = "25px";
-  document.querySelector('.suggestions-mobile').style.display = "none";
+try {
+  document.querySelector('.search-input-mobile').addEventListener('input', async () => {
+    const input = document.querySelector('.search-input-mobile').value;
+    document.querySelector('.search-bar-mobile').style.borderRadius = "25px";
+    document.querySelector('.suggestions-mobile').style.display = "none";
 
-  try {
-    const response = await fetch('books.json');
-    const data = await response.json();
-    document.querySelector('.suggestions-mobile').innerHTML = '';
-    if (input.length < 2) {
-      document.querySelector('.search-bar-mobile').style.borderRadius = "25px";
-      document.querySelector('.suggestions-mobile').style.display = "none";
-      return;
+    try {
+      const response = await fetch('books.json');
+      const data = await response.json();
+      document.querySelector('.suggestions-mobile').innerHTML = '';
+      if (input.length < 2) {
+        document.querySelector('.search-bar-mobile').style.borderRadius = "25px";
+        document.querySelector('.suggestions-mobile').style.display = "none";
+        return;
+      }
+
+
+      data.forEach(book => {
+        if (book.name.toLowerCase().includes(input.toLowerCase())) {
+          document.querySelector('.search-bar-mobile').style.borderRadius = "25px 25px 25px 0"
+          document.querySelector('.suggestions-mobile').style.display = "flex";
+          const suggestion = document.createElement('div');
+          suggestion.classList.add('suggestion');
+          suggestion.innerHTML = book.name;
+          document.querySelector('.suggestions-mobile').appendChild(suggestion);
+
+        }
+      })
+    } catch (error) {
+      console.error(error);
     }
 
 
-    data.forEach(book => {
-      if (book.name.toLowerCase().includes(input.toLowerCase())) {
-        document.querySelector('.search-bar-mobile').style.borderRadius = "25px 25px 25px 0"
-        document.querySelector('.suggestions-mobile').style.display = "flex";
-        const suggestion = document.createElement('div');
-        suggestion.classList.add('suggestion');
-        suggestion.innerHTML = book.name;
-        document.querySelector('.suggestions-mobile').appendChild(suggestion);
+    document.querySelectorAll('.suggestion').forEach(suggest => {
+      suggest.addEventListener('click', async function () {
+        document.querySelector('.search-input-mobile').value = suggest.innerHTML;
+        document.querySelector('.search-bar-mobile').style.borderRadius = "25px";
+        document.querySelector('.suggestions-mobile').innerHTML = '';
+        document.querySelector('.suggestions-mobile').style.display = "none"
 
-      }
+
+      })
     })
-  } catch (error) {
-    console.error(error);
-  }
 
 
-  document.querySelectorAll('.suggestion').forEach(suggest => {
-    suggest.addEventListener('click', async function () {
-      document.querySelector('.search-input-mobile').value = suggest.innerHTML;
-      document.querySelector('.search-bar-mobile').style.borderRadius = "25px";
-      document.querySelector('.suggestions-mobile').innerHTML = '';
-      document.querySelector('.suggestions-mobile').style.display = "none"
+
+    document.querySelectorAll('.search-button-mobile').forEach(button => {
+      button.addEventListener('click', async function () {
+        const input = document.querySelector('.search-input-mobile').value;
+        window.location.href = `book.html?title=${input}`
 
 
+      })
     })
+
   })
-
-
-
-  document.querySelectorAll('.search-button-mobile').forEach(button => {
-    button.addEventListener('click', async function () {
-      const input = document.querySelector('.search-input-mobile').value;
-      window.location.href = `book.html?title=${input}`
-
-
-    })
-  })
-
-})
 }
-catch(error){
+catch (error) {
   console.log(error);
 }
 
@@ -657,79 +657,118 @@ function cartTotal() {
 
 }
 
-try{
-document.getElementById('clear-cart-btn').addEventListener('click' , ()=>{
-  localStorage.removeItem('cart');
-  loadCart();
+try {
+  document.getElementById('clear-cart-btn').addEventListener('click', () => {
+    localStorage.removeItem('cart');
+    loadCart();
 
-})
-}catch(error){
-  console.log(error);
-}
-
-
-
-
-
-try{
-document.getElementById('checkout-btn').addEventListener('click' , ()=>{
-  const token = localStorage.getItem('token');
-
-  if (!token) {
-    alert('Please login first');
-    window.location.href = "login.html"
-    return;
-  }
-
-
-  const username = localStorage.getItem('username');
-  const mobile = localStorage.getItem('mobile');
-  const email = localStorage.getItem('email');
-
-  document.getElementById('cart-container').style.display = "none";
-  document.getElementById('checkout-container').style.display = "none";
-  document.getElementById('btn-container').style.display = "none";
-
-  const paymentcon = document.getElementById('payment-container');
-  paymentcon.style.display = "flex";
-  document.getElementById("cart-title").innerText = "Payment Details";
-
-  document.getElementById('payment-name').value = username;
-  document.getElementById('payment-email').value = email;
-  document.getElementById('payment-mobile').value = mobile;
-
-  document.getElementById('submit-order').addEventListener('click', () => {
-    submitOrder(username, mobile, email);
   })
-
-  window.location.href = "#payment-container"
-
-
-
-})
-}
-catch(error){
+} catch (error) {
   console.log(error);
 }
 
-try{
-document.getElementById('choose-login-btn').addEventListener('click', () => {
-  document.querySelector('.selected-btn').style.transform = "translateX(0%)";
 
 
-  const container = document.getElementById('main-user-container');
-  container.innerHTML = '';
 
-  container.innerHTML = `<label for="username">Email</label>
+
+try {
+  document.getElementById('checkout-btn').addEventListener('click', () => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      alert('Please login first');
+      window.location.href = "login.html"
+      return;
+    }
+
+
+    const username = localStorage.getItem('username');
+    const mobile = localStorage.getItem('mobile');
+    const email = localStorage.getItem('email');
+
+    document.getElementById('cart-container').style.display = "none";
+    document.getElementById('checkout-container').style.display = "none";
+    document.getElementById('btn-container').style.display = "none";
+
+    const paymentcon = document.getElementById('payment-container');
+    paymentcon.style.display = "flex";
+    document.getElementById("cart-title").innerText = "Payment Details";
+
+    document.getElementById('payment-name').value = username;
+    document.getElementById('payment-email').value = email;
+    document.getElementById('payment-mobile').value = mobile;
+
+    document.getElementById('submit-order').addEventListener('click', () => {
+      submitOrder(username, mobile, email);
+    })
+
+    window.location.href = "#payment-container"
+
+
+
+
+
+    document.getElementById('payment-pin').addEventListener('input', async () => {
+      const pin = document.getElementById('payment-pin').value;
+
+      fetch(`https://api.postalpincode.in/pincode/${pin}`)
+        .then((response) => response.json())
+        .then((data) => {
+          
+          if (data[0].Status === "Error") {
+            console.error("Invalid PIN code or data not found");
+            return;
+          }
+
+          const city = document.getElementById("payment-city");
+          const postOfficeList = data[0].PostOffice;
+
+          
+          city.innerHTML = "";
+          city.innerHTML = `<option> Select City</option>`
+
+
+          postOfficeList.forEach((el) => {
+            const citydet = `${el.Name}, ${el.District}`;
+            const optcity = `<option value="${el.Name}">${citydet}</option>`;
+            console.log(citydet);
+            city.innerHTML += optcity;
+          });
+        })
+        .catch((error) => {
+          console.error("An error occurred:", error);
+        });
+
+
+    })
+
+
+
+
+  })
+}
+catch (error) {
+  console.log(error);
+}
+
+try {
+  document.getElementById('choose-login-btn').addEventListener('click', () => {
+    document.querySelector('.selected-btn').style.transform = "translateX(0%)";
+
+
+    const container = document.getElementById('main-user-container');
+    container.innerHTML = '';
+
+    container.innerHTML = `<label for="username">Email</label>
             <input type="email" name="username" id="login-email" placeholder="john@gmail.com">
             <label for="password">Password</label>
             <input type="password" name="password" id="login-password" placeholder="********">
             <button id="login-btn">Login</button>`
 
 
-});
+  });
 }
-catch(error){
+catch (error) {
   console.log(error);
 }
 
@@ -741,60 +780,60 @@ catch(error){
 
 
 
-try{
-document.getElementById('login-btn').addEventListener('click', async () => {
-  document.querySelector('.login-loader-container').style.display = "flex"
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
+try {
+  document.getElementById('login-btn').addEventListener('click', async () => {
+    document.querySelector('.login-loader-container').style.display = "flex"
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
 
-  if (!email || !password) {
-    alert('Please enter valid information');
-    return;
-  }
+    if (!email || !password) {
+      alert('Please enter valid information');
+      return;
+    }
 
-  try {
-    const response = await fetch('https://bookhive-yxmn.onrender.com/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password
-      })
-    });
+    try {
+      const response = await fetch('https://bookhive-yxmn.onrender.com/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      console.log('User data:', data);
-      localStorage.setItem('token', data.token)
-      localStorage.setItem('username', data.user.name)
-      localStorage.setItem('email', data.user.email)
-      localStorage.setItem('mobile', data.user.mobile)
+      if (response.ok) {
+        console.log('User data:', data);
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('username', data.user.name)
+        localStorage.setItem('email', data.user.email)
+        localStorage.setItem('mobile', data.user.mobile)
 
 
 
-      alert('Login successful');
+        alert('Login successful');
 
-      if (localStorage.getItem('token')) {
-        window.location.href = "index.html";
+        if (localStorage.getItem('token')) {
+          window.location.href = "index.html";
+        }
+
+
+
+
+      } else {
+        alert(data.message || 'Login failed');
+        location.reload()
       }
-
-
-
-
-    } else {
-      alert(data.message || 'Login failed');
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Something went wrong. Please try again later.');
       location.reload()
     }
-  } catch (error) {
-    console.error('Error:', error);
-    alert('Something went wrong. Please try again later.');
-    location.reload()
-  }
-});
-}catch(error){
+  });
+} catch (error) {
   console.error(error)
 }
 
@@ -805,15 +844,15 @@ document.getElementById('login-btn').addEventListener('click', async () => {
 
 
 
-try{
+try {
 
-document.getElementById('choose-signup-btn').addEventListener('click', () => {
-  document.querySelector('.selected-btn').style.transform = "translateX(100%)";
+  document.getElementById('choose-signup-btn').addEventListener('click', () => {
+    document.querySelector('.selected-btn').style.transform = "translateX(100%)";
 
-  const container = document.getElementById('main-user-container');
-  container.innerHTML = '';
+    const container = document.getElementById('main-user-container');
+    container.innerHTML = '';
 
-  container.innerHTML = `<label for="name">Name</label>
+    container.innerHTML = `<label for="name">Name</label>
             <input type="text" name="name" id="signup-text" placeholder="John Doe">
             <label for="mobile">Phone Number</label>
             <input type="number" name="mobile" id="signup-number" placeholder="9999999999">
@@ -825,59 +864,59 @@ document.getElementById('choose-signup-btn').addEventListener('click', () => {
             <button id="signup-btn">Signup</button>`;
 
 
-  document.getElementById('signup-btn').addEventListener('click', async () => {
-    document.querySelector('.login-loader-container').style.display = "flex"
-    const name = document.getElementById('signup-text').value;
-    const mobile = document.getElementById('signup-number').value;
-    const email = document.getElementById('signup-email').value;
-    const password = document.getElementById('signup-password').value;
-    const time = new Date().toLocaleString();
+    document.getElementById('signup-btn').addEventListener('click', async () => {
+      document.querySelector('.login-loader-container').style.display = "flex"
+      const name = document.getElementById('signup-text').value;
+      const mobile = document.getElementById('signup-number').value;
+      const email = document.getElementById('signup-email').value;
+      const password = document.getElementById('signup-password').value;
+      const time = new Date().toLocaleString();
 
 
-    if (!name || !mobile || !email || !password) {
-      alert('Please fill in all fields');
-      return;
-    }
+      if (!name || !mobile || !email || !password) {
+        alert('Please fill in all fields');
+        return;
+      }
 
-    try {
+      try {
 
-      const response = await fetch('https://bookhive-yxmn.onrender.com/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          username: name,
-          mobile: mobile,
-          email: email,
-          password: password,
-          time: time
-        })
-      });
+        const response = await fetch('https://bookhive-yxmn.onrender.com/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: name,
+            mobile: mobile,
+            email: email,
+            password: password,
+            time: time
+          })
+        });
 
 
-      const data = await response.json();
-      if (response.ok) {
-        alert('Signup successful');
-        console.log(data);
-        location.reload()
-      } else {
-        alert(data.message || 'Signup failed');
+        const data = await response.json();
+        if (response.ok) {
+          alert('Signup successful');
+          console.log(data);
+          location.reload()
+        } else {
+          alert(data.message || 'Signup failed');
+          location.reload()
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Something went wrong. Please try again later.');
         location.reload()
       }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Something went wrong. Please try again later.');
-      location.reload()
-    } 
-  });
+    });
 
 
 
 
 
-})
-}catch(error){
+  })
+} catch (error) {
   console.error(error)
 }
 
