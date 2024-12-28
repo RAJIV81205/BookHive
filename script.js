@@ -72,7 +72,7 @@ async function verifyToken() {
   }
 
   try {
-    const response = await fetch('https://bookhive-yxmn.onrender.com/verify', {
+    const response = await fetch('https://bookhive2-1k7bw13r.b4a.run/verify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -792,7 +792,7 @@ try {
     }
 
     try {
-      const response = await fetch('https://bookhive-yxmn.onrender.com/login', {
+      const response = await fetch('https://bookhive2-1k7bw13r.b4a.run/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -880,7 +880,7 @@ try {
 
       try {
 
-        const response = await fetch('https://bookhive-yxmn.onrender.com/signup', {
+        const response = await fetch('https://bookhive2-1k7bw13r.b4a.run/signup', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -960,7 +960,7 @@ async function submitOrder(username, mobile, email) {
 
   try {
 
-    const response = await fetch('https://bookhive-yxmn.onrender.com/submit-order', {
+    const response = await fetch('https://bookhive2-1k7bw13r.b4a.run/submit-order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
