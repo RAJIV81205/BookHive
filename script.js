@@ -714,7 +714,7 @@ try {
       fetch(`https://api.postalpincode.in/pincode/${pin}`)
         .then((response) => response.json())
         .then((data) => {
-          
+
           if (data[0].Status === "Error") {
             console.error("Invalid PIN code or data not found");
             return;
@@ -723,7 +723,7 @@ try {
           const city = document.getElementById("payment-city");
           const postOfficeList = data[0].PostOffice;
 
-          
+
           city.innerHTML = "";
           city.innerHTML = `<option> Select City</option>`
 
@@ -935,6 +935,7 @@ async function submitOrder(username, mobile, email) {
   const add = document.getElementById('payment-address').value;
   const pincode = document.getElementById('payment-pin').value;
   const state = document.getElementById('payment-state').value;
+  const city = document.getElementById('payment-city').value;
   const paytype = document.getElementById('payment-type').value;
   const cart = JSON.parse(localStorage.getItem('cart'));
   const cost = localStorage.getItem('price');
@@ -972,6 +973,7 @@ async function submitOrder(username, mobile, email) {
         email: email,
         add: add,
         pincode: parseInt(pincode),
+        city: city,
         state: state,
         paytype: paytype,
         items: items,
@@ -985,7 +987,7 @@ async function submitOrder(username, mobile, email) {
     if (response.ok) {
       console.log('Order Submitted Successfully:', responseData);
       alert('Order Submitted Successfully');
-      displayConfirmation(orderNumber, username, mobile, email, add, pincode, state, paytype, items, cost)
+      displayConfirmation(orderNumber, username, mobile, email, add, pincode, state, paytype, items, cost, city)
 
     } else {
       console.error('Error submitting order:', responseData);
@@ -998,59 +1000,171 @@ async function submitOrder(username, mobile, email) {
 }
 
 
-function displayConfirmation(orderNumber, username, mobile, email, add, pincode, state, paytype, items, cost) {
+async function displayConfirmation(orderNumber, username, mobile, email, add, pincode, state, paytype, items, cost) {
   window.location.href = "#confirm-container";
   document.getElementById('confirm-container').style.display = "flex";
 
-  const table = document.getElementById('order-item-details');
-  const cart = localStorage.getItem('cart-total');
+  const response = await fetch('books.json');
+  const books = await response.json();
 
 
-  document.getElementById("order-details").innerHTML = `
-    <table>
-      <caption>Order Details</caption>
-      <tr>
-        <th>Order Number</th>
-        <td>${orderNumber}</td>
-      </tr>
-      <tr>
-        <th>Name</th>
-        <td>${username}</td>
-      </tr>
-      <tr>
-        <th>Email</th>
-        <td>${email}</td>
-      </tr>
-      <tr>
-        <th>Mobile</th>
-        <td>${mobile}</td>
-      </tr>
-      <tr>
-        <th>Address</th>
-        <td>${add}</td>
-      </tr>
-      <tr>
-        <th>Pincode</th>
-        <td>${pincode}</td>
-      </tr>
-      <tr>
-        <th>State</th>
-        <td>${state}</td>
-      </tr>
-      <tr>
-        <th>Payment Method</th>
-        <td>${paytype}</td>
-      </tr>
-      <tr>
-        <th>Total Items</th>
-        <td>${cart}</td>
-      </tr>
-      <tr>
-        <th>Total Cost</th>
-        <td>₹ ${cost}</td>
-      </tr>
-    </table>`;
+  let tableRows = "";
+  items.forEach(item => {
+    const book = books.find(b => b.isbn === item);
+    if (book) {
+      const totalPrice = 1 * book.price;
+      tableRows += `
+        <tr>
+          <td>${book.name}</td>
+          <td>1</td>
+          <td>₹${book.price}</td>
+          <td>₹${totalPrice}</td>
+        </tr>
+      `;
+    }
+  });
 
+  // HTML content for the invoice
+  const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Invoice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .invoice-container {
+      max-width: 800px;
+      margin: auto;
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 5px;
+    }
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+    .invoice-header img {
+      max-width: 150px;
+    }
+    .invoice-header h1 {
+      font-size: 24px;
+      color: #333;
+    }
+    .invoice-details {
+      margin-top: 20px;
+    }
+    .invoice-details table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .invoice-details th, .invoice-details td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .invoice-details th {
+      background-color: #f5f5f5;
+    }
+    .total-container {
+      margin-top: 20px;
+      text-align: right;
+    }
+    .total-container h3 {
+      font-size: 18px;
+      color: #333;
+    }
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-container" id="invoice">
+    <div class="invoice-header">
+      <h1>BookHive</h1>
+    </div>
+
+    <div class="invoice-details">
+      <h3>Order Details:</h3>
+      <p><strong>Order No:</strong> ${orderNumber}</p>
+      <p><strong>Name:</strong> ${username}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Mobile:</strong> ${mobile}</p>
+      <p><strong>Address:</strong> ${add}, ${state} - ${pincode}</p>
+      
+      <h3>Items Ordered:</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableRows}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="total-container">
+      <h3>Total Amount: ₹${cost}</h3>
+    </div>
+
+    <div class="footer">
+      <p>Thank you for shopping with us!</p>
+      <p>BookHive - India - bookhive@gmail.com</p>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+
+
+
+  document.getElementById('download').addEventListener('click', async () => {
+    try {
+
+
+      // Send HTML to backend
+      const response = await fetch('https://bookhive2-1k7bw13r.b4a.run/generate-pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ html: htmlContent }),
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        // Trigger download
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'invoice.pdf';
+        a.click();
+
+        // Clean up
+        window.URL.revokeObjectURL(url);
+      } else {
+        console.error('Failed to generate PDF:', await response.text());
+      }
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
+  });
 
 
 
@@ -1058,12 +1172,11 @@ function displayConfirmation(orderNumber, username, mobile, email, add, pincode,
   localStorage.removeItem('price');
 
 
-
-
   document.getElementById('close-popup').addEventListener('click', () => {
-    window.location.href = "index.html"
-  })
+    window.location.href = "index.html";
+  });
 }
+
 
 
 
