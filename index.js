@@ -2,8 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const cors = require('cors'); 
+const cors = require('cors');
 const dotenv = require('dotenv');
+const pdf = require('html-pdf');
 const path = require('path');
 
 
@@ -12,8 +13,9 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors()); 
-app.use(express.static(path.join(__dirname)))
+app.use(cors());
+app.use(express.static(path.join(__dirname)));
+
 
 
 
@@ -30,16 +32,16 @@ mongoose.connect(MONGODB_URI, {
     .catch(err => console.error('Error connecting to MongoDB:', err));
 
 
-    const userSchema = new mongoose.Schema({
-        username: { type: String, required: true, trim: true },
-        mobile: { type: String, default: '' }, 
-        email: { type: String, required: true, lowercase: true, unique: true },
-        password: { type: String, default: '' }, 
-        time: { type: String },
-    });
-    
-    const User = mongoose.model('User', userSchema);
-    
+const userSchema = new mongoose.Schema({
+    username: { type: String, required: true, trim: true },
+    mobile: { type: String, default: '' },
+    email: { type: String, required: true, lowercase: true, unique: true },
+    password: { type: String, default: '' },
+    time: { type: String },
+});
+
+const User = mongoose.model('User', userSchema);
+
 
 
 
@@ -112,22 +114,22 @@ app.post('/google-signin', async (req, res) => {
     try {
         const { email, name } = req.body;
 
-        
+
         let user = await User.findOne({ email });
         if (!user) {
-            
+
             user = new User({
                 username: name,
-                mobile: '', 
+                mobile: '',
                 email,
-                password: '', 
+                password: '',
                 time: new Date().toISOString(),
             });
 
             await user.save();
         }
 
-        
+
         const token = jwt.sign(
             { id: user._id },
             JWT_SECRET,
@@ -151,11 +153,12 @@ app.post('/google-signin', async (req, res) => {
 
 
 const orderSchema = new mongoose.Schema({
-    orderNumber : {type:Number , unique:true},
+    orderNumber: { type: Number, unique: true },
     name: { type: String, trim: true, required: true },
     mobile: { type: String, required: true },
     email: { type: String, lowercase: true, required: true },
     add: { type: String, required: true },
+    city: { type: String, required: true },
     pincode: { type: Number, required: true },
     state: { type: String, required: true },
     paytype: { type: String, required: true },
@@ -170,14 +173,14 @@ app.post('/submit-order', async (req, res) => {
     try {
         console.log('Incoming request body:', req.body);
 
-        const { orderNumber ,name, mobile, email, add, pincode, state, paytype, items, cost } = req.body;
+        const { orderNumber, name, mobile, email, add, pincode, state, paytype, items, cost, city } = req.body;
 
-        
+
         if (!orderNumber || !name || !mobile || !email || !add || !pincode || !state || !paytype || !items || !cost) {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
-        
+
         const newOrder = new Order({
             orderNumber,
             name,
@@ -185,6 +188,7 @@ app.post('/submit-order', async (req, res) => {
             email,
             add,
             pincode,
+            city,
             state,
             paytype,
             items,
@@ -217,12 +221,27 @@ app.post('/verify', async (req, res) => {
             decode
         );
 
-    }catch (error) {
+    } catch (error) {
         res.status(500).json({ error: error.message });
     }
 
-  })
+})
 
+
+app.post('/generate-pdf', (req, res) => {
+    const htmlContent = req.body.html;
+  
+    pdf.create(htmlContent).toStream((err, stream) => {
+      if (err) {
+        console.error('Error generating PDF:', err);
+        return res.status(500).send('Error generating PDF');
+      }
+  
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
+      stream.pipe(res);
+    });
+  });
 
 
 
