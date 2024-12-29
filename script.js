@@ -848,21 +848,13 @@ try {
 
 
   });
-}
-catch (error) {
-  console.log(error);
-}
 
 
 
 
 
-
-
-
-
-try {
-  document.getElementById('login-btn').addEventListener('click', async () => {
+  document.getElementById('main-user-container').addEventListener('click', async (event) => {
+    if (event.target && event.target.id === 'login-btn') {
     document.querySelector('.login-loader-container').style.display = "flex"
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
@@ -939,6 +931,8 @@ try {
 
 
 
+
+
       } else {
         document.querySelector('.login-loader-container').style.display = "none";
         Swal.fire({
@@ -967,7 +961,9 @@ try {
       });
       location.reload()
     }
-  });
+  }
+})
+
 } catch (error) {
   console.error(error)
 }
@@ -1063,7 +1059,7 @@ try {
               timerProgressBar: 'custom-swal-timer-bar',
             },
           }).then((result) => {
-  
+
             if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
               window.location.href = 'login.html';
             }
