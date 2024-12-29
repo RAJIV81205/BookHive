@@ -930,7 +930,7 @@ footer {
 
 .selected-btn {
   background-color: var(--button-color);
-  border: 1px solid yellow;
+  border: none;
   top: 0;
   position: absolute;
   left: 0;
@@ -1068,7 +1068,6 @@ footer {
   border: 2px solid rgb(0, 18, 1);
   justify-content: space-evenly;
   align-items: center;
-
   box-shadow: 0 0 50px rgb(142, 190, 178);
 
 }
@@ -1161,22 +1160,22 @@ footer {
 }
 
 
-/* SweetAlert2 Custom Theme */
+
 .custom-swal-popup {
-  background-color: #fdf5e6; /* Change to your theme color */
-  border: 2px solid #ffa500; /* Accent border */
+  background-color: #fdf5e6; 
+  border: 2px solid #ffa500; 
   border-radius: 10px;
 }
 
 .custom-swal-title {
-  color: var(--section-background); /* Primary theme color for the title */
-  font-family: 'Arial', sans-serif; /* Use your site's font */
+  color: var(--section-background); 
+  font-family: 'Arial', sans-serif; 
   font-weight: bold;
 }
 
 .custom-swal-button {
-  background-color:var(--button-color); /* Button background color */
-  color: var(--primary-color); /* Button text color */
+  background-color:var(--button-color); 
+  color: var(--primary-color); 
   font-size: 14px;
   padding: 10px 20px;
   border-radius: 10px;
@@ -1186,10 +1185,10 @@ footer {
 }
 
 .custom-swal-button:hover {
-  background-color: #b2d7b5; /* Hover effect */
+  background-color: #b2d7b5; 
 }
 
 .custom-swal-timer-bar {
-  background-color: #ffa500 !important; /* Timer bar color */
+  background-color: #ffa500 !important; 
 }
 
