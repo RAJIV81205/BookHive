@@ -467,9 +467,37 @@ async function fetchBooks(genre) {
         if (!wishlist.some(item => item.isbn === isbn)) {
           wishlist.push(book);
           localStorage.setItem('wishlist', JSON.stringify(wishlist));
-          alert(`${book.name} added to wishlist!`);
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "success",
+            title: `${book.name} added to the wishlist!.`
+          });
         } else {
-          alert(`${book.name} is already in the wishlist.`);
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "info",
+            title: `${book.name} is already in the wishlist.`
+          });
         }
       });
     });
@@ -492,7 +520,21 @@ async function fetchBooks(genre) {
           updateCartCount()
           button.textContent = "Added"
         } else {
-          alert(`${book.name} is already in the cart.`);
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "info",
+            title: `${book.name} is already in the cart.`
+          });
         }
       });
     });
@@ -610,6 +652,12 @@ function loadCart() {
   });
 }
 
+
+
+
+
+
+
 function updateCartCount() {
   const cart = JSON.parse(localStorage.getItem('cart')) || [];
   const cartCountElements = document.querySelectorAll('.cart .count');
@@ -660,6 +708,21 @@ function cartTotal() {
 try {
   document.getElementById('clear-cart-btn').addEventListener('click', () => {
     localStorage.removeItem('cart');
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "Your Cart has been cleared!"
+    });
     loadCart();
 
   })
@@ -676,8 +739,26 @@ try {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      alert('Please login first');
-      window.location.href = "login.html"
+      Swal.fire({
+        title: 'Please Login First!',
+        text: 'Login to Checkout',
+        icon: 'warning',
+        showConfirmButton: true,
+        confirmButtonText: 'Login',
+        timer: 3000, // 3 seconds
+        timerProgressBar: true,
+        customClass: {
+          popup: 'custom-swal-popup',
+          title: 'custom-swal-title',
+          confirmButton: 'custom-swal-button',
+          timerProgressBar: 'custom-swal-timer-bar',
+        },
+      }).then((result) => {
+
+        if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+          window.location.href = 'login.html';
+        }
+      });
       return;
     }
 
@@ -787,7 +868,22 @@ try {
     const password = document.getElementById('login-password').value;
 
     if (!email || !password) {
-      alert('Please enter valid information');
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Please enter valid information."
+      });
+      document.querySelector('.login-loader-container').style.display = "none";
       return;
     }
 
@@ -811,25 +907,64 @@ try {
         localStorage.setItem('username', data.user.name)
         localStorage.setItem('email', data.user.email)
         localStorage.setItem('mobile', data.user.mobile)
+        document.querySelector('.login-loader-container').style.display = "none";
 
 
 
-        alert('Login successful');
+        Swal.fire({
+          title: 'Login Successful!',
+          text: `Welcome Back! ${data.user.name}.`,
+          icon: 'success',
+          showConfirmButton: true,
+          confirmButtonText: 'Start Shopping',
+          timer: 3000, // 3 seconds
+          timerProgressBar: true,
+          customClass: {
+            popup: 'custom-swal-popup',
+            title: 'custom-swal-title',
+            confirmButton: 'custom-swal-button',
+            timerProgressBar: 'custom-swal-timer-bar',
+          },
+        }).then((result) => {
 
-        if (localStorage.getItem('token')) {
-          window.location.href = "index.html";
-        }
+          if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+            window.location.href = 'index.html';
+          }
+        });
+
+
+
+
 
 
 
 
       } else {
-        alert(data.message || 'Login failed');
-        location.reload()
+        document.querySelector('.login-loader-container').style.display = "none";
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: `${data.message}` || 'Login failed',
+          timer: 3000,
+          showConfirmButton: true,
+          confirmButtonText: 'Try Again',
+        }).then((result) => {
+
+          if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+            location.reload()
+          }
+        })
+
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Something went wrong. Please try again later.');
+      document.querySelector('.login-loader-container').style.display = "none";
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong , Please try Again Later!",
+        timer: 3000
+      });
       location.reload()
     }
   });
@@ -874,7 +1009,23 @@ try {
 
 
       if (!name || !mobile || !email || !password) {
-        alert('Please fill in all fields');
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "error",
+          title: "Please fill in all fields"
+        });
+
+        document.querySelector('.login-loader-container').style.display = "none"
         return;
       }
 
@@ -897,16 +1048,54 @@ try {
 
         const data = await response.json();
         if (response.ok) {
-          alert('Signup successful');
+          Swal.fire({
+            title: 'Signup Successful!',
+            text: `Login to continue.`,
+            icon: 'success',
+            showConfirmButton: true,
+            confirmButtonText: 'Login',
+            timer: 3000, // 3 seconds
+            timerProgressBar: true,
+            customClass: {
+              popup: 'custom-swal-popup',
+              title: 'custom-swal-title',
+              confirmButton: 'custom-swal-button',
+              timerProgressBar: 'custom-swal-timer-bar',
+            },
+          }).then((result) => {
+  
+            if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+              window.location.href = 'login.html';
+            }
+          });
           console.log(data);
-          location.reload()
         } else {
-          alert(data.message || 'Signup failed');
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "error",
+            title: `${data.message} || 'Signup failed'`
+          });
           location.reload()
         }
       } catch (error) {
         console.error('Error:', error);
-        alert('Something went wrong. Please try again later.');
+        document.querySelector('.login-loader-container').style.display = "none";
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong , Please try Again Later!",
+          timer: 3000
+        });
         location.reload()
       }
     });
@@ -941,12 +1130,40 @@ async function submitOrder(username, mobile, email) {
   const cost = localStorage.getItem('price');
 
   if (!add || !pincode || !state || !paytype || !cart || !cost) {
-    alert('Please fill all the details and ensure cart/price is not empty');
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "error",
+      title: "Please fill in all fields"
+    });
     return;
   }
 
   if (pincode < 100000 || pincode > 999999) {
-    alert("Wrong Pincode");
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "error",
+      title: "Wrong Pincode"
+    });
     location.reload()
     return;
   }
@@ -986,7 +1203,21 @@ async function submitOrder(username, mobile, email) {
 
     if (response.ok) {
       console.log('Order Submitted Successfully:', responseData);
-      alert('Order Submitted Successfully');
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Order Submitted Successully!"
+      });
       displayConfirmation(orderNumber, username, mobile, email, add, pincode, state, paytype, items, cost, city)
 
     } else {
@@ -995,7 +1226,21 @@ async function submitOrder(username, mobile, email) {
     }
   } catch (error) {
     console.error('Fetch error:', error);
-    alert('An error occurred while submitting the order. Please try again.');
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "error",
+      title: "An Error Occurred, Please Try Again Later"
+    });
   }
 }
 
@@ -1100,7 +1345,7 @@ async function displayConfirmation(orderNumber, username, mobile, email, add, pi
       <p><strong>Name:</strong> ${username}</p>
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>Mobile:</strong> ${mobile}</p>
-      <p><strong>Address:</strong> ${add}, ${state} - ${pincode}</p>
+      <p><strong>Address:</strong> ${add},${city} ,${state} - ${pincode}</p>
       
       <h3>Items Ordered:</h3>
       <table>
