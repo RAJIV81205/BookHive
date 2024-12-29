@@ -767,6 +767,13 @@ try {
     const mobile = localStorage.getItem('mobile');
     const email = localStorage.getItem('email');
 
+    if(mobile === ''){
+      document.getElementById('payment-mobile').disabled = false;
+    }
+    else{
+      document.getElementById('payment-mobile').value = mobile;
+
+    }
     document.getElementById('cart-container').style.display = "none";
     document.getElementById('checkout-container').style.display = "none";
     document.getElementById('btn-container').style.display = "none";
@@ -777,7 +784,9 @@ try {
 
     document.getElementById('payment-name').value = username;
     document.getElementById('payment-email').value = email;
-    document.getElementById('payment-mobile').value = mobile;
+    
+
+    
 
     document.getElementById('submit-order').addEventListener('click', () => {
       submitOrder(username, mobile, email);
@@ -792,17 +801,36 @@ try {
     document.getElementById('payment-pin').addEventListener('input', async () => {
       const pin = document.getElementById('payment-pin').value;
 
+      if (pin.length != 6) {
+        return;
+      }
+
       fetch(`https://api.postalpincode.in/pincode/${pin}`)
         .then((response) => response.json())
         .then((data) => {
 
           if (data[0].Status === "Error") {
-            console.error("Invalid PIN code or data not found");
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              }
+            });
+            Toast.fire({
+              icon: "error",
+              title: "Invalid Pin Code"
+            });
             return;
           }
 
           const city = document.getElementById("payment-city");
           const postOfficeList = data[0].PostOffice;
+          document.getElementById('payment-state').value = data[0].PostOffice[0].State;
 
 
           city.innerHTML = "";
@@ -855,74 +883,74 @@ try {
 
   document.getElementById('main-user-container').addEventListener('click', async (event) => {
     if (event.target && event.target.id === 'login-btn') {
-    document.querySelector('.login-loader-container').style.display = "flex"
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
+      document.querySelector('.login-loader-container').style.display = "flex"
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
 
-    if (!email || !password) {
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        }
-      });
-      Toast.fire({
-        icon: "error",
-        title: "Please enter valid information."
-      });
-      document.querySelector('.login-loader-container').style.display = "none";
-      return;
-    }
-
-    try {
-      const response = await fetch('https://bookhive2-1k7bw13r.b4a.run/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password
-        })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        console.log('User data:', data);
-        localStorage.setItem('token', data.token)
-        localStorage.setItem('username', data.user.name)
-        localStorage.setItem('email', data.user.email)
-        localStorage.setItem('mobile', data.user.mobile)
-        document.querySelector('.login-loader-container').style.display = "none";
-
-
-
-        Swal.fire({
-          title: 'Login Successful!',
-          text: `Welcome Back! ${data.user.name}.`,
-          icon: 'success',
-          showConfirmButton: true,
-          confirmButtonText: 'Start Shopping',
-          timer: 3000, // 3 seconds
+      if (!email || !password) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
           timerProgressBar: true,
-          customClass: {
-            popup: 'custom-swal-popup',
-            title: 'custom-swal-title',
-            confirmButton: 'custom-swal-button',
-            timerProgressBar: 'custom-swal-timer-bar',
-          },
-        }).then((result) => {
-
-          if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
-            window.location.href = 'index.html';
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
           }
         });
+        Toast.fire({
+          icon: "error",
+          title: "Please enter valid information."
+        });
+        document.querySelector('.login-loader-container').style.display = "none";
+        return;
+      }
+
+      try {
+        const response = await fetch('https://bookhive2-1k7bw13r.b4a.run/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          console.log('User data:', data);
+          localStorage.setItem('token', data.token)
+          localStorage.setItem('username', data.user.name)
+          localStorage.setItem('email', data.user.email)
+          localStorage.setItem('mobile', data.user.mobile)
+          document.querySelector('.login-loader-container').style.display = "none";
+
+
+
+          Swal.fire({
+            title: 'Login Successful!',
+            text: `Welcome Back! ${data.user.name}.`,
+            icon: 'success',
+            showConfirmButton: true,
+            confirmButtonText: 'Start Shopping',
+            timer: 3000, // 3 seconds
+            timerProgressBar: true,
+            customClass: {
+              popup: 'custom-swal-popup',
+              title: 'custom-swal-title',
+              confirmButton: 'custom-swal-button',
+              timerProgressBar: 'custom-swal-timer-bar',
+            },
+          }).then((result) => {
+
+            if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+              window.location.href = 'index.html';
+            }
+          });
 
 
 
@@ -933,36 +961,36 @@ try {
 
 
 
-      } else {
+        } else {
+          document.querySelector('.login-loader-container').style.display = "none";
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `${data.message}` || 'Login failed',
+            timer: 3000,
+            showConfirmButton: true,
+            confirmButtonText: 'Try Again',
+          }).then((result) => {
+
+            if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+              location.reload()
+            }
+          })
+
+        }
+      } catch (error) {
+        console.error('Error:', error);
         document.querySelector('.login-loader-container').style.display = "none";
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: `${data.message}` || 'Login failed',
-          timer: 3000,
-          showConfirmButton: true,
-          confirmButtonText: 'Try Again',
-        }).then((result) => {
-
-          if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
-            location.reload()
-          }
-        })
-
+          text: "Something went wrong , Please try Again Later!",
+          timer: 3000
+        });
+        location.reload()
       }
-    } catch (error) {
-      console.error('Error:', error);
-      document.querySelector('.login-loader-container').style.display = "none";
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong , Please try Again Later!",
-        timer: 3000
-      });
-      location.reload()
     }
-  }
-})
+  })
 
 } catch (error) {
   console.error(error)
@@ -986,7 +1014,7 @@ try {
     container.innerHTML = `<label for="name">Name</label>
             <input type="text" name="name" id="signup-text" placeholder="John Doe">
             <label for="mobile">Phone Number</label>
-            <input type="number" name="mobile" id="signup-number" placeholder="9999999999">
+            <input type="tel" name="mobile" id="signup-number" placeholder="9999999999">
             <label for="username">Email</label>
             <input type="email" name="username" id="signup-email" placeholder="john@gmail.com">
             <label for="password">Password</label>
@@ -1050,7 +1078,7 @@ try {
             icon: 'success',
             showConfirmButton: true,
             confirmButtonText: 'Login',
-            timer: 3000, // 3 seconds
+            timer: 3000,
             timerProgressBar: true,
             customClass: {
               popup: 'custom-swal-popup',
@@ -1059,7 +1087,6 @@ try {
               timerProgressBar: 'custom-swal-timer-bar',
             },
           }).then((result) => {
-
             if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
               window.location.href = 'login.html';
             }
@@ -1079,9 +1106,14 @@ try {
           });
           Toast.fire({
             icon: "error",
-            title: `${data.message} || 'Signup failed'`
-          });
-          location.reload()
+            title: `${data.message}` || 'Signup failed'
+          }).then((result) => {
+            if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+              window.location.href = 'login.html';
+            }
+          })
+
+
         }
       } catch (error) {
         console.error('Error:', error);
@@ -1092,7 +1124,7 @@ try {
           text: "Something went wrong , Please try Again Later!",
           timer: 3000
         });
-        location.reload()
+
       }
     });
 
@@ -1125,7 +1157,7 @@ async function submitOrder(username, mobile, email) {
   const cart = JSON.parse(localStorage.getItem('cart'));
   const cost = localStorage.getItem('price');
 
-  if (!add || !pincode || !state || !paytype || !cart || !cost) {
+  if (!add || !pincode || !state || !paytype || !cart || !cost  || !city) {
     const Toast = Swal.mixin({
       toast: true,
       position: "top-end",
@@ -1241,7 +1273,7 @@ async function submitOrder(username, mobile, email) {
 }
 
 
-async function displayConfirmation(orderNumber, username, mobile, email, add, pincode, state, paytype, items, cost) {
+async function displayConfirmation(orderNumber, username, mobile, email, add, pincode, state, paytype, items, cost, city) {
   window.location.href = "#confirm-container";
   document.getElementById('confirm-container').style.display = "flex";
 
