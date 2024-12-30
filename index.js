@@ -1,11 +1,12 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const pdf = require('html-pdf');
-const path = require('path');
+import express from 'express';
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import pdf from 'html-pdf';
+import upiqr from "upiqr";
+import path from "path";
 
 
 
@@ -14,8 +15,8 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(express.static(path.join(__dirname)));
 
+app.use(express.static(path.join(__dirname)))
 
 
 
@@ -230,18 +231,36 @@ app.post('/verify', async (req, res) => {
 
 app.post('/generate-pdf', (req, res) => {
     const htmlContent = req.body.html;
-  
+
     pdf.create(htmlContent).toStream((err, stream) => {
-      if (err) {
-        console.error('Error generating PDF:', err);
-        return res.status(500).send('Error generating PDF');
-      }
-  
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
-      stream.pipe(res);
+        if (err) {
+            console.error('Error generating PDF:', err);
+            return res.status(500).send('Error generating PDF');
+        }
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
+        stream.pipe(res);
     });
-  });
+});
+
+app.post('/upi-pay', (req, res) => {
+    const { cost } = req.body;
+
+    upiqr({
+        payeeVPA: "lucky81205@okicici",
+        payeeName: "Rajiv Dubey",
+        amount: `${cost}`,
+        transactionNote: "BookHive"
+    })
+        .then(({ qr, intent }) => {
+            res.status(201).json({ img: `${qr}`, link: `${intent}` });
+        })
+})
+
+
+
+
 
 
 
