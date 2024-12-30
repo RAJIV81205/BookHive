@@ -767,10 +767,10 @@ try {
     const mobile = localStorage.getItem('mobile');
     const email = localStorage.getItem('email');
 
-    if(mobile === ''){
+    if (mobile === '') {
       document.getElementById('payment-mobile').disabled = false;
     }
-    else{
+    else {
       document.getElementById('payment-mobile').value = mobile;
 
     }
@@ -784,12 +784,12 @@ try {
 
     document.getElementById('payment-name').value = username;
     document.getElementById('payment-email').value = email;
-    
 
-    
+
+
 
     document.getElementById('submit-order').addEventListener('click', () => {
-      submitOrder(username, mobile, email);
+      submitOrder(username, email);
     })
 
     window.location.href = "#payment-container"
@@ -1145,71 +1145,122 @@ try {
 
 
 
-
-
-async function submitOrder(username, mobile, email) {
+async function submitOrder(username, email) {
+  const mobile = document.getElementById("payment-mobile").value;
   const orderNumber = Math.round(Math.random() * 1000000);
-  const add = document.getElementById('payment-address').value;
-  const pincode = document.getElementById('payment-pin').value;
-  const state = document.getElementById('payment-state').value;
-  const city = document.getElementById('payment-city').value;
-  const paytype = document.getElementById('payment-type').value;
-  const cart = JSON.parse(localStorage.getItem('cart'));
-  const cost = localStorage.getItem('price');
+  const add = document.getElementById("payment-address").value;
+  const pincode = document.getElementById("payment-pin").value;
+  const state = document.getElementById("payment-state").value;
+  const city = document.getElementById("payment-city").value;
+  const paytype = document.getElementById("payment-type").value;
+  const cart = JSON.parse(localStorage.getItem("cart"));
+  const cost = localStorage.getItem("price");
 
-  if (!add || !pincode || !state || !paytype || !cart || !cost  || !city) {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      }
-    });
-    Toast.fire({
-      icon: "error",
-      title: "Please fill in all fields"
-    });
+  // Validation checks
+  if (!add || !pincode || !state || !paytype || !cart || !cost || !city) {
+    showToast("error", "Please fill in all fields");
     return;
   }
 
   if (pincode < 100000 || pincode > 999999) {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      }
-    });
-    Toast.fire({
-      icon: "error",
-      title: "Wrong Pincode"
-    });
-    location.reload()
+    showToast("error", "Wrong Pincode");
+    location.reload();
     return;
   }
 
-
   const items = [];
-  cart.forEach(item => {
+  cart.forEach((item) => {
     if (item.isbn) {
       items.push(item.isbn);
     }
   });
 
-  try {
+  // Handle UPI Payment if selected
+  if (paytype === "UPI") {
+    await UPIpay(cost);
+  }
 
-    const response = await fetch('https://bookhive2-1k7bw13r.b4a.run/submit-order', {
-      method: 'POST',
+  // Submit the order
+  await processOrder(username, email, mobile, orderNumber, add, pincode, state, city, paytype, items, cost);
+}
+
+// Helper function for showing toast messages
+function showToast(icon, title) {
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
+  Toast.fire({ icon, title });
+}
+
+// UPI Payment Function
+async function UPIpay(cost) {
+  const response = await fetch("https://bookhive2-1k7bw13r.b4a.run/upi-pay", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      cost: cost,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (response.ok) {
+    await Swal.fire({
+      title: "UPI Payment",
+      html: `
+        <div style="text-align: center;">
+          <p>Please scan the QR code below to complete your payment:</p>
+          <img src="${data.img}" alt="UPI QR Code" style="width: 200px; height: 200px; margin: 10px 0;" />
+          <p>Or click the button below to make payment:</p>
+          <a href="${data.link}" target="_blank" class="swal-payment-link" style="display: inline-block; margin: 10px; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Pay Now</a>
+        </div>
+        <p>Auto-closing in <b>300</b> seconds.</p>
+      `,
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      timer: 300000, // 5 minutes
+      timerProgressBar: true,
+      didOpen: () => {
+        const content = Swal.getHtmlContainer();
+        const timerInterval = setInterval(() => {
+          if (content) {
+            const timerElement = content.querySelector("b");
+            if (timerElement) {
+              timerElement.textContent = Math.ceil(Swal.getTimerLeft() / 1000);
+            }
+          }
+        }, 1000);
+
+        Swal.getPopup().addEventListener("mouseenter", Swal.resumeTimer);
+        Swal.getPopup().addEventListener("mouseleave", Swal.resumeTimer);
+
+        Swal.willClose(() => {
+          clearInterval(timerInterval);
+        });
+      },
+    });
+  } else {
+    showToast("error", "Failed to generate UPI payment details.");
+  }
+}
+
+// Function to process the order after UPI timer
+async function processOrder(username, email, mobile, orderNumber, add, pincode, state, city, paytype, items, cost) {
+  try {
+    const response = await fetch("https://bookhive2-1k7bw13r.b4a.run/submit-order", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         orderNumber: orderNumber,
@@ -1222,59 +1273,50 @@ async function submitOrder(username, mobile, email) {
         state: state,
         paytype: paytype,
         items: items,
-        cost: parseFloat(cost)
-      })
+        cost: parseFloat(cost),
+      }),
     });
-
 
     const responseData = await response.json();
 
     if (response.ok) {
-      console.log('Order Submitted Successfully:', responseData);
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        }
-      });
-      Toast.fire({
-        icon: "success",
-        title: "Order Submitted Successully!"
-      });
-      displayConfirmation(orderNumber, username, mobile, email, add, pincode, state, paytype, items, cost, city)
-
+      console.log("Order Submitted Successfully:", responseData);
+      showToast("success", "Order Submitted Successfully!");
+      displayConfirmation(
+        orderNumber,
+        username,
+        mobile,
+        email,
+        add,
+        pincode,
+        state,
+        paytype,
+        items,
+        cost,
+        city
+      );
     } else {
-      console.error('Error submitting order:', responseData);
-      alert('Error submitting order: ' + (responseData.message || 'Unknown error'));
+      console.error("Error submitting order:", responseData);
+      alert("Error submitting order: " + (responseData.message || "Unknown error"));
     }
   } catch (error) {
-    console.error('Fetch error:', error);
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      }
-    });
-    Toast.fire({
-      icon: "error",
-      title: "An Error Occurred, Please Try Again Later"
-    });
+    console.error("Fetch error:", error);
+    showToast("error", "An Error Occurred, Please Try Again Later");
   }
 }
 
+    
+
+
+
+
+
+
+
+
 
 async function displayConfirmation(orderNumber, username, mobile, email, add, pincode, state, paytype, items, cost, city) {
-  window.location.href = "#confirm-container";
+  window.location.href = "#payment-container";
   document.getElementById('confirm-container').style.display = "flex";
 
   const response = await fetch('books.json');
