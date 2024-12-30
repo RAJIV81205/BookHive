@@ -1,10 +1,10 @@
 {
   "name": "bookhive",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.cjs",
   "type": "module",
   "scripts": {
-    "test": "node index.js"
+    "test": "node index.cjs"
   },
   "author": "",
   "license": "ISC",
