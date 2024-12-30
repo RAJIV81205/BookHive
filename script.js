@@ -482,6 +482,7 @@ async function fetchBooks(genre) {
             icon: "success",
             title: `${book.name} added to the wishlist!.`
           });
+          button.innerHTML = `<img src="https://i.postimg.cc/8cZKcKKC/heart.png">`
         } else {
           const Toast = Swal.mixin({
             toast: true,
