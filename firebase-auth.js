@@ -50,8 +50,26 @@ document.getElementById("google-login-btn").addEventListener("click", async () =
       localStorage.setItem('username', data.user.name)
       localStorage.setItem('email', data.user.email)
       localStorage.setItem('mobile', data.user.mobile)
-      alert('Login successful!');
-      window.location.href = 'index.html'
+      Swal.fire({
+        title: 'Login Successful!',
+        text: `Welcome Back! ${data.user.name}.`,
+        icon: 'success',
+        showConfirmButton: true,
+        confirmButtonText: 'Start Shopping',
+        timer: 3000, // 3 seconds
+        timerProgressBar: true,
+        customClass: {
+          popup: 'custom-swal-popup',
+          title: 'custom-swal-title',
+          confirmButton: 'custom-swal-button',
+          timerProgressBar: 'custom-swal-timer-bar',
+        },
+      }).then((result) => {
+
+        if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+          window.location.href = 'index.html';
+        }
+      });
     } else {
       alert(data.message);
     }
