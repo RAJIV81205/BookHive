@@ -31,7 +31,7 @@ document.getElementById("google-login-btn").addEventListener("click", async () =
     const user = result.user;
 
 
-    const response = await fetch('https://bookhive-yxmn.onrender.com/google-signin', {
+    const response = await fetch('https://bookhive2-1k7bw13r.b4a.run/google-signin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -49,14 +49,15 @@ document.getElementById("google-login-btn").addEventListener("click", async () =
       localStorage.setItem('token', data.token)
       localStorage.setItem('username', data.user.name)
       localStorage.setItem('email', data.user.email)
-      localStorage.setItem('mobile', data.user.mobile)
+      localStorage.setItem('mobile', data.user.mobile);
+      document.querySelector('.login-loader-container').style.display = "none";
       Swal.fire({
         title: 'Login Successful!',
         text: `Welcome Back! ${data.user.name}.`,
         icon: 'success',
         showConfirmButton: true,
         confirmButtonText: 'Start Shopping',
-        timer: 3000, // 3 seconds
+        timer: 3000, 
         timerProgressBar: true,
         customClass: {
           popup: 'custom-swal-popup',
